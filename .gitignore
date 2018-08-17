@@ -1,7 +1,6 @@
 .git/
 .idea/
 ~$*.*
-*.json
 dish.html
 *.xml
 
