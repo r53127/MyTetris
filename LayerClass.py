@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect , QPoint
 from PyQt5.QtGui import QImage
 
 
@@ -58,8 +58,71 @@ class LayerClass():
                           QRect(self.imgW - CONST.SIZE, self.imgH - CONST.SIZE, CONST.SIZE, CONST.SIZE))
 
 class DBLayer(LayerClass):
-    def __init__(self):
-        pass
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+        painter.drawImage(QPoint(self.x+CONST.PADDING,self.y+CONST.PADDING),QImage(CONST.DBImg))
+
+class WorldLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+        painter.drawImage(QPoint(self.x+CONST.PADDING,self.y+CONST.PADDING),QImage(CONST.WorldImg))
+
+class GameLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+
+class ButtonLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+        painter.drawImage(QPoint(self.x+CONST.PADDING,self.y+CONST.PADDING),QImage(CONST.StartImg))
+
+class NextLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+
+class PointLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+
+class LevelLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+        painter.drawImage(QPoint(self.x+CONST.PADDING,self.y+CONST.PADDING),QImage(CONST.LevelImg))
+
+class AboutLayer(LayerClass):
+    def __init__(self,x,y,w,h):
+        super().__init__(x,y,w,h)
+
+    def paint(self,painter):
+        self.CreateLayer(painter)
+        painter.drawImage(QPoint(self.x+CONST.PADDING,self.y+CONST.PADDING),QImage(CONST.LogoImg))
+
+
+
+
+
+
 
 
 

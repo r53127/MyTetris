@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication ,QMainWindow
 from PyQt5.QtGui import QPixmap,QPainter,QBitmap , QIcon , QCursor , QImageReader , QPainterPath , QPen , QImage
 from PyQt5.QtCore import Qt , QRect ,QPoint
-from LayerClass import LayerClass
+from LayerClass import *
 
 class TetrisWindow(QMainWindow):
     def __init__(self):
@@ -10,25 +10,15 @@ class TetrisWindow(QMainWindow):
         self.initUI()
 
         self.layers=[
-            LayerClass(40, 32, 334, 279),
-            LayerClass(40, 343, 334, 279),
-            LayerClass(414, 32, 334, 590),  # 游戏窗口，小方块为32*32像素，边框宽度为7，游戏窗口为16：9, 宽=32*10+14，高=18*32+14
-            LayerClass(788, 32, 334, 124),
-            LayerClass(788, 188, 176, 148),
-            LayerClass(964, 188, 158, 148),
-            LayerClass(788, 368, 334, 124),
-            LayerClass(788, 524, 334, 98),
+            DBLayer(40, 32, 334, 279),
+            WorldLayer(40, 343, 334, 279),
+            GameLayer(414, 32, 334, 590),  # 游戏窗口，小方块为32*32像素，边框宽度为7，游戏窗口为16：9, 宽=32*10+14，高=18*32+14
+            ButtonLayer(788, 32, 334, 124),
+            NextLayer(788, 188, 176, 148),
+            PointLayer(964, 188, 158, 148),
+            LevelLayer(788, 368, 334, 124),
+            AboutLayer(788, 524, 334, 98),
          ]
-        self.img_position={
-            (820, 536):QImage("Graphics/game/logo.png"),
-            (60, 52): QImage("Graphics/game/db.png"),
-            (60,363):QImage("Graphics/game/world.png"),
-            (820,64): QImage("Graphics/game/start.png"),
-            (970, 64): QImage("Graphics/game/exit.png"),
-            (1000, 208): QImage("Graphics/game/level.png"),
-            (808, 378): QImage("Graphics/game/score.png"),
-            (808, 418): QImage("Graphics/game/rmline.png")
-        }
 
 
 
@@ -67,10 +57,7 @@ class TetrisWindow(QMainWindow):
             painter = QPainter(self)
             painter.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap("Graphics/Backgroud/screen1.jpg"))
             for layer in self.layers:
-                layer.CreateLayer(painter)
-            for img_pos in self.img_position:
-                painter.drawImage(QPoint(img_pos[0],img_pos[1]), self.img_position[img_pos])
-
+                layer.paint(painter)
         except BaseException as e:
             print('错误是:',e)
 
