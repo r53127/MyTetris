@@ -8,16 +8,16 @@ class TetrisWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-        img = "Graphics/windows/windows.png"
+
         self.layers=[
-            LayerClass(40, 32, 334, 279, img, 7),
-            LayerClass(40, 343, 334, 279, img, 7),
-            LayerClass(414, 32, 334, 590, img, 7),  # 游戏窗口，小方块为32*32像素，边框宽度为7，游戏窗口为16：9, 宽=32*10+14，高=18*32+14
-            LayerClass(788, 32, 334, 124, img, 7),
-            LayerClass(788, 188, 176, 148, img, 7),
-            LayerClass(964, 188, 158, 148, img, 7),
-            LayerClass(788, 368, 334, 124, img, 7),
-            LayerClass(788, 524, 334, 98, img, 7),
+            LayerClass(40, 32, 334, 279),
+            LayerClass(40, 343, 334, 279),
+            LayerClass(414, 32, 334, 590),  # 游戏窗口，小方块为32*32像素，边框宽度为7，游戏窗口为16：9, 宽=32*10+14，高=18*32+14
+            LayerClass(788, 32, 334, 124),
+            LayerClass(788, 188, 176, 148),
+            LayerClass(964, 188, 158, 148),
+            LayerClass(788, 368, 334, 124),
+            LayerClass(788, 524, 334, 98),
          ]
         self.img_position={
             (820, 536):QImage("Graphics/game/logo.png"),
