@@ -1,19 +1,6 @@
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtGui import QImage
-
-
-class CONST():
-    SIZE = 7  # pic cornor width : 7 pixel
-    PADDING = 16  # pic padding : 16 pixel
-    FrameImg = "Graphics/windows/windows.png"
-    LogoImg = "Graphics/game/logo.png"
-    DBImg = "Graphics/game/db.png"
-    WorldImg = "Graphics/game/world.png"
-    StartImg = "Graphics/game/start.png"
-    ExitImg = "Graphics/game/exit.png"
-    LevelImg = "Graphics/game/level.png"
-    ScoreImg = "Graphics/game/score.png"
-    RmlineImg = "Graphics/game/rmline.png"
+from Const import CONST
 
 
 class LayerClass():
@@ -27,39 +14,39 @@ class LayerClass():
 
     def createlayer(self, painter):
         # 左上
-        painter.drawImage(QRect(self.x, self.y, CONST.SIZE, CONST.SIZE), QImage(CONST.FrameImg),
-                          QRect(0, 0, CONST.SIZE, CONST.SIZE))
+        painter.drawImage(QRect(self.x, self.y, CONST.CORNERSIZE, CONST.CORNERSIZE), QImage(CONST.FrameImg),
+                          QRect(0, 0, CONST.CORNERSIZE, CONST.CORNERSIZE))
         # 中上
-        painter.drawImage(QRect(self.x + CONST.SIZE, self.y, self.w - 2 * CONST.SIZE, CONST.SIZE),
+        painter.drawImage(QRect(self.x + CONST.CORNERSIZE, self.y, self.w - 2 * CONST.CORNERSIZE, CONST.CORNERSIZE),
                           QImage(CONST.FrameImg),
-                          QRect(CONST.SIZE, 0, self.imgW - 2 * CONST.SIZE, CONST.SIZE))
+                          QRect(CONST.CORNERSIZE, 0, self.imgW - 2 * CONST.CORNERSIZE, CONST.CORNERSIZE))
         # 右上
-        painter.drawImage(QRect(self.x + self.w - CONST.SIZE, self.y, CONST.SIZE, CONST.SIZE), QImage(CONST.FrameImg),
-                          QRect(self.imgW - CONST.SIZE, 0, CONST.SIZE, CONST.SIZE))
+        painter.drawImage(QRect(self.x + self.w - CONST.CORNERSIZE, self.y, CONST.CORNERSIZE, CONST.CORNERSIZE), QImage(CONST.FrameImg),
+                          QRect(self.imgW - CONST.CORNERSIZE, 0, CONST.CORNERSIZE, CONST.CORNERSIZE))
         # 左中
-        painter.drawImage(QRect(self.x, self.y + CONST.SIZE, CONST.SIZE, self.h - 2 * CONST.SIZE),
+        painter.drawImage(QRect(self.x, self.y + CONST.CORNERSIZE, CONST.CORNERSIZE, self.h - 2 * CONST.CORNERSIZE),
                           QImage(CONST.FrameImg),
-                          QRect(0, CONST.SIZE, CONST.SIZE, self.imgH - 2 * CONST.SIZE))
+                          QRect(0, CONST.CORNERSIZE, CONST.CORNERSIZE, self.imgH - 2 * CONST.CORNERSIZE))
         # 中中
         painter.drawImage(
-            QRect(self.x + CONST.SIZE, self.y + CONST.SIZE, self.w - 2 * CONST.SIZE, self.h - 2 * CONST.SIZE),
+            QRect(self.x + CONST.CORNERSIZE, self.y + CONST.CORNERSIZE, self.w - 2 * CONST.CORNERSIZE, self.h - 2 * CONST.CORNERSIZE),
             QImage(CONST.FrameImg),
-            QRect(CONST.SIZE, CONST.SIZE, self.imgW - 2 * CONST.SIZE, self.imgH - 2 * CONST.SIZE))
+            QRect(CONST.CORNERSIZE, CONST.CORNERSIZE, self.imgW - 2 * CONST.CORNERSIZE, self.imgH - 2 * CONST.CORNERSIZE))
         # 右中
-        painter.drawImage(QRect(self.x + self.w - CONST.SIZE, self.y + CONST.SIZE, CONST.SIZE, self.h - 2 * CONST.SIZE),
+        painter.drawImage(QRect(self.x + self.w - CONST.CORNERSIZE, self.y + CONST.CORNERSIZE, CONST.CORNERSIZE, self.h - 2 * CONST.CORNERSIZE),
                           QImage(CONST.FrameImg),
-                          QRect(self.imgW - CONST.SIZE, CONST.SIZE, CONST.SIZE, self.imgH - 2 * CONST.SIZE))
+                          QRect(self.imgW - CONST.CORNERSIZE, CONST.CORNERSIZE, CONST.CORNERSIZE, self.imgH - 2 * CONST.CORNERSIZE))
         # 左下
-        painter.drawImage(QRect(self.x, self.y + self.h - CONST.SIZE, CONST.SIZE, CONST.SIZE), QImage(CONST.FrameImg),
-                          QRect(0, self.imgH - CONST.SIZE, CONST.SIZE, CONST.SIZE))
+        painter.drawImage(QRect(self.x, self.y + self.h - CONST.CORNERSIZE, CONST.CORNERSIZE, CONST.CORNERSIZE), QImage(CONST.FrameImg),
+                          QRect(0, self.imgH - CONST.CORNERSIZE, CONST.CORNERSIZE, CONST.CORNERSIZE))
         # 中下
-        painter.drawImage(QRect(self.x + CONST.SIZE, self.y + self.h - CONST.SIZE, self.w - 2 * CONST.SIZE, CONST.SIZE),
+        painter.drawImage(QRect(self.x + CONST.CORNERSIZE, self.y + self.h - CONST.CORNERSIZE, self.w - 2 * CONST.CORNERSIZE, CONST.CORNERSIZE),
                           QImage(CONST.FrameImg),
-                          QRect(CONST.SIZE, self.imgH - CONST.SIZE, self.imgW - 2 * CONST.SIZE, CONST.SIZE))
+                          QRect(CONST.CORNERSIZE, self.imgH - CONST.CORNERSIZE, self.imgW - 2 * CONST.CORNERSIZE, CONST.CORNERSIZE))
         # 右下
-        painter.drawImage(QRect(self.x + self.w - CONST.SIZE, self.y + self.h - CONST.SIZE, CONST.SIZE, CONST.SIZE),
+        painter.drawImage(QRect(self.x + self.w - CONST.CORNERSIZE, self.y + self.h - CONST.CORNERSIZE, CONST.CORNERSIZE, CONST.CORNERSIZE),
                           QImage(CONST.FrameImg),
-                          QRect(self.imgW - CONST.SIZE, self.imgH - CONST.SIZE, CONST.SIZE, CONST.SIZE))
+                          QRect(self.imgW - CONST.CORNERSIZE, self.imgH - CONST.CORNERSIZE, CONST.CORNERSIZE, CONST.CORNERSIZE))
 
 
 class DBLayer(LayerClass):

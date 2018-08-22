@@ -4,24 +4,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from LayerClass import *
+from GameCfg import GameCfg
 
 
 class TetrisWindow(QMainWindow):
+    cfg = GameCfg()
     def __init__(self):
         super().__init__()
         self.initUI()
-
-        self.layers=[
-            DBLayer(40, 32, 334, 279),
-            WorldLayer(40, 343, 334, 279),
-            GameLayer(414, 32, 334, 590),  # game main window，small rect size is 32*32，game window width:height ratio is 16：9, width=32*10+14，height=18*32+14
-            ButtonLayer(788, 32, 334, 124),
-            NextLayer(788, 188, 176, 148),
-            LevelLayer(964, 188, 158, 148),
-            PointLayer(788, 368, 334, 124),
-            AboutLayer(788, 524, 334, 98),
-         ]
 
 
 
@@ -59,7 +49,7 @@ class TetrisWindow(QMainWindow):
         try:
             painter = QPainter(self)
             painter.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap("Graphics/Backgroud/screen1.jpg"))
-            for layer in self.layers:
+            for layer in TetrisWindow.cfg.layers:
                 layer.paint(painter)
         except BaseException as e:
             print('Error is :',e)
