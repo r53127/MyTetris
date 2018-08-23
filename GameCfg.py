@@ -1,15 +1,14 @@
 import xml.dom.minidom as dom
 
-from Const import CONST
-
-
 class GameCfg():
-
     def __init__(self):
-        doc = dom.parse(CONST.CfgFile).documentElement
+        #read cfg file
+        doc = dom.parse("config/cfg.xml").documentElement
         attrlist = doc.getElementsByTagName('frame')
         self.window_width=attrlist[0].getAttribute('width')
         self.window_heitht=attrlist[0].getAttribute("height")
+        self.padding = int(attrlist[0].getAttribute("padding"))
+        self.cornersize = int(attrlist[0].getAttribute("cornersize"))
         self.layerscfg=[]
         layerlist=doc.getElementsByTagName('layer')
         for layer in layerlist:
@@ -69,7 +68,3 @@ class LayerCfg():
             raise ValueError('h must be an integer!')
         self._h=value
 
-
-
-if __name__ == '__main__':
-    GameCfg().CfgReader()

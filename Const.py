@@ -1,6 +1,6 @@
+from GameCfg import GameCfg
 class CONST():
-    CORNERSIZE = 7  # pic cornor width : 7 pixel
-    PADDING = 16  # pic padding : 16 pixel
+    CFG=GameCfg() #load config file
     FrameImg = "Graphics/windows/windows.png"
     LogoImg = "Graphics/game/logo.png"
     DBImg = "Graphics/game/db.png"
@@ -10,4 +10,5 @@ class CONST():
     LevelImg = "Graphics/game/level.png"
     ScoreImg = "Graphics/game/score.png"
     RmlineImg = "Graphics/game/rmline.png"
-    CfgFile = "config/cfg.xml"
+
+
