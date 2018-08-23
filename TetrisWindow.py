@@ -5,14 +5,19 @@ from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 from GameCfg import GameCfg
-
+import LayerClass
 
 class TetrisWindow(QMainWindow):
-    cfg = GameCfg()
+    #load game config
+    CFG = GameCfg()
     def __init__(self):
         super().__init__()
+        #make layer objects
+        self.layers=[]
+        for layer in TetrisWindow.CFG.layerscfg:
+            creator=getattr(LayerClass,layer.classname)# python reflect mechanism
+            self.layers.append(creator(layer.x,layer.y,layer.w,layer.h))
         self.initUI()
-
 
 
     def initUI(self):
@@ -48,8 +53,10 @@ class TetrisWindow(QMainWindow):
     def paintEvent(self, QPaintEvent):
         try:
             painter = QPainter(self)
+            #draw backgroud
             painter.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap("Graphics/Backgroud/screen1.jpg"))
-            for layer in TetrisWindow.cfg.layers:
+            #draw layers
+            for layer in self.layers:
                 layer.paint(painter)
         except BaseException as e:
             print('Error is :',e)
