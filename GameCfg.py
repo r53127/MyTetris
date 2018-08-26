@@ -4,11 +4,11 @@ class GameCfg():
     def __init__(self):
         #read cfg file
         doc = dom.parse("config/cfg.xml").documentElement
-        attrlist = doc.getElementsByTagName('frame')
-        self.window_width=attrlist[0].getAttribute('width')
-        self.window_heitht=attrlist[0].getAttribute("height")
-        self.padding = int(attrlist[0].getAttribute("padding"))
-        self.cornersize = int(attrlist[0].getAttribute("cornersize"))
+        framelist = doc.getElementsByTagName('frame')
+        self.window_width=framelist[0].getAttribute('width')
+        self.window_heitht=framelist[0].getAttribute("height")
+        self.padding = int(framelist[0].getAttribute("padding"))
+        self.cornersize = int(framelist[0].getAttribute("cornersize"))
         self.layerscfg=[]
         layerlist=doc.getElementsByTagName('layer')
         for layer in layerlist:

@@ -4,27 +4,38 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from Const import CONST
+import GameService
 import LayerClass
+from Const import CONST
+from GameControl import GameControl
+
 
 class TetrisWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.layers=[]
-        for layer in CONST.CFG.layerscfg:  #load layers size ,make layers object
-            creator=getattr(LayerClass,layer.classname)# python reflect mechanism
-            self.layers.append(creator(layer.x,layer.y,layer.w,layer.h))
+        self.initLayer()
         self.initUI()
+        self.initCtroller()
 
+    def initLayer(self):
+        self.layers = []
+        for layer in CONST.CFG.layerscfg:  # load layers size ,make layers object
+            creator = getattr(LayerClass, layer.classname)  # python reflect mechanism
+            self.layers.append(creator(layer.x, layer.y, layer.w, layer.h))
 
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
         self.setWindowIcon(QIcon('Graphics\windows\windows.png'))
         self.pix = QBitmap("Graphics/Backgroud/mask3.png")
-        self.resize(self.pix.size())#Masking panel pic size：1162*654
+        self.resize(self.pix.size())  # Masking panel pic size：1162*654
         self.setMask(self.pix)
         self.setWindowOpacity(1)  # set transparency
         self.show()
+
+    def initCtroller(self):
+        gameService = GameService()
+        gameCtrl = GameControl(self)
+
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -54,12 +65,10 @@ class TetrisWindow(QMainWindow):
             for layer in self.layers:
                 layer.paint(painter)
         except BaseException as e:
-            print('Error is :',e)
+            print('Error is :', e)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = TetrisWindow()
     sys.exit(app.exec_())
-
-

@@ -1,8 +1,10 @@
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtGui import QImage
+from PyQt5.QtWidgets import QFrame
 
 from Const import CONST
 
+FRMAEIMG = CONST.FrameImg
 SIZE = CONST.CFG.cornersize # pic cornor width : 7 pixel
 PADDING = CONST.CFG.padding # pic padding : 16 pixel
 
@@ -12,43 +14,43 @@ class LayerClass():
         self.y = y
         self.w = w
         self.h = h
-        self.imgW = QImage(CONST.FrameImg).width()
-        self.imgH = QImage(CONST.FrameImg).height()
+        self.imgW = QImage(FRMAEIMG).width()
+        self.imgH = QImage(FRMAEIMG).height()
 
     def createlayer(self, painter):
         # 左上
-        painter.drawImage(QRect(self.x, self.y, SIZE, SIZE), QImage(CONST.FrameImg),
+        painter.drawImage(QRect(self.x, self.y, SIZE, SIZE), QImage(FRMAEIMG),
                           QRect(0, 0, SIZE, SIZE))
         # 中上
         painter.drawImage(QRect(self.x + SIZE, self.y, self.w - 2 * SIZE, SIZE),
-                          QImage(CONST.FrameImg),
+                          QImage(FRMAEIMG),
                           QRect(SIZE, 0, self.imgW - 2 * SIZE, SIZE))
         # 右上
-        painter.drawImage(QRect(self.x + self.w - SIZE, self.y, SIZE, SIZE), QImage(CONST.FrameImg),
+        painter.drawImage(QRect(self.x + self.w - SIZE, self.y, SIZE, SIZE), QImage(FRMAEIMG),
                           QRect(self.imgW - SIZE, 0, SIZE, SIZE))
         # 左中
         painter.drawImage(QRect(self.x, self.y + SIZE, SIZE, self.h - 2 * SIZE),
-                          QImage(CONST.FrameImg),
+                          QImage(FRMAEIMG),
                           QRect(0, SIZE, SIZE, self.imgH - 2 * SIZE))
         # 中中
         painter.drawImage(
             QRect(self.x + SIZE, self.y + SIZE, self.w - 2 * SIZE, self.h - 2 * SIZE),
-            QImage(CONST.FrameImg),
+            QImage(FRMAEIMG),
             QRect(SIZE, SIZE, self.imgW - 2 * SIZE, self.imgH - 2 * SIZE))
         # 右中
         painter.drawImage(QRect(self.x + self.w - SIZE, self.y + SIZE, SIZE, self.h - 2 * SIZE),
-                          QImage(CONST.FrameImg),
+                          QImage(FRMAEIMG),
                           QRect(self.imgW - SIZE, SIZE, SIZE, self.imgH - 2 * SIZE))
         # 左下
-        painter.drawImage(QRect(self.x, self.y + self.h - SIZE, SIZE, SIZE), QImage(CONST.FrameImg),
+        painter.drawImage(QRect(self.x, self.y + self.h - SIZE, SIZE, SIZE), QImage(FRMAEIMG),
                           QRect(0, self.imgH - SIZE, SIZE, SIZE))
         # 中下
         painter.drawImage(QRect(self.x + SIZE, self.y + self.h - SIZE, self.w - 2 * SIZE, SIZE),
-                          QImage(CONST.FrameImg),
+                          QImage(FRMAEIMG),
                           QRect(SIZE, self.imgH - SIZE, self.imgW - 2 * SIZE, SIZE))
         # 右下
         painter.drawImage(QRect(self.x + self.w - SIZE, self.y + self.h - SIZE, SIZE, SIZE),
-                          QImage(CONST.FrameImg),
+                          QImage(FRMAEIMG),
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
 

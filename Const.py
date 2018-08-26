@@ -1,6 +1,8 @@
 from GameCfg import GameCfg
+
+
 class CONST():
-    CFG=GameCfg() #load config file
+    CFG = GameCfg()  # load config file
     FrameImg = "Graphics/windows/windows.png"
     LogoImg = "Graphics/game/logo.png"
     DBImg = "Graphics/game/db.png"
@@ -10,5 +12,3 @@ class CONST():
     LevelImg = "Graphics/game/level.png"
     ScoreImg = "Graphics/game/score.png"
     RmlineImg = "Graphics/game/rmline.png"
-
-
