@@ -17,6 +17,10 @@ class LayerClass():
         self.imgW = QImage(FRMAEIMG).width()
         self.imgH = QImage(FRMAEIMG).height()
 
+    def setGameDto(self,dto):
+        self.dto=dto
+        print('install dto to layer')
+
     def createlayer(self, painter):
         # 左上
         painter.drawImage(QRect(self.x, self.y, SIZE, SIZE), QImage(FRMAEIMG),
@@ -114,6 +118,7 @@ class PointLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.ScoreImg))
+        painter.drawText(QPoint(self.x+100,self.y+100),str(self.dto.nowPoint))
 
 
 class AboutLayer(LayerClass):

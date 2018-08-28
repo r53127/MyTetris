@@ -4,25 +4,28 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from GameDto import GameDto
 import LayerClass
 from Const import CONST
 from GameControl import GameControl
+from GameDto import GameDto
 from GameService import GameService
 
 
 class TetrisWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, dto):
         super().__init__()
         self.initLayer()
         self.initUI()
         self.initComponent()
+        self.dto = dto
 
     def initLayer(self):
         self.layers = []
-        for layer in CONST.CFG.layerscfg:  # load layers size ,make layers object
-            creator = getattr(LayerClass, layer.classname)  # python reflect mechanism
-            self.layers.append(creator(layer.x, layer.y, layer.w, layer.h))#create and init layers
+        for layercfg in CONST.CFG.layerscfg:  # load layers size ,make layers object
+            creator = getattr(LayerClass, layercfg.classname)  # python reflect mechanism
+            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h)
+            self.layers.append(layer)  # create and init layers
+            # layer.setGameDto(self.dto)  # 把游戏数据对象传递给layer
 
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
@@ -36,8 +39,8 @@ class TetrisWindow(QMainWindow):
     def initComponent(self):
         pass
 
-    def setGameControl(self,gameControl):
-        self.gameControl=gameControl
+    def setGameControl(self, gameControl):
+        self.gameControl = gameControl
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -49,14 +52,18 @@ class TetrisWindow(QMainWindow):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
-        elif event.key() == Qt.Key_E:
-            self.gameControl.up()
-        elif event.key() == Qt.Key_D:
-            self.gameControl.down()
-        elif event.key() == Qt.Key_S:
-            self.gameControl.left()
-        elif event.key() == Qt.Key_F:
-            self.gameControl.right()
+        try:
+            self.gameControl.gameTest()
+        except BaseException as e:
+            print('Error is :', e)
+        # elif event.key() == Qt.Key_E:
+        #     self.gameControl.up()
+        # elif event.key() == Qt.Key_D:
+        #     self.gameControl.down()
+        # elif event.key() == Qt.Key_S:
+        #     self.gameControl.left()
+        # elif event.key() == Qt.Key_F:
+        #     self.gameControl.right()
 
     def mouseMoveEvent(self, QMouseEvent):
         if Qt.LeftButton and self.m_drag:
@@ -73,21 +80,21 @@ class TetrisWindow(QMainWindow):
             painter = QPainter(self)
             painter.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap("Graphics/Backgroud/screen1.jpg"))
             for layer in self.layers:
-                layer.paint(painter)
+                layer.paint(painter)  # 显示layer
         except BaseException as e:
             print('Error is :', e)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    #创建游戏数据源
-    gameDto=GameDto()
-    #创建游戏面板
-    gameWin = TetrisWindow()
-    #创建游戏逻辑块（连接游戏数据源）
-    gameServ=GameService(gameDto)
-    #创建游戏控制器（链接游戏面板和游戏逻辑块）
-    gameCtrl=GameControl(gameWin,gameServ)
-    #安装游戏控制器
-    gameWin.setGameControl(gameCtrl)
+    # 创建游戏数据源
+    gameDto = GameDto()
+    # 创建游戏面板(连接游戏数据源)
+    gameWin = TetrisWindow(gameDto)
+    # 创建游戏逻辑块（连接游戏数据源）
+    gameServ = GameService(gameDto)
+    # 创建游戏控制器（链接游戏面板和游戏逻辑块）
+    gameCtrl = GameControl(gameWin, gameServ)
+    # 安装游戏控制器
+    gameWin.setGameControl(gameCtrl)  # 传送对象的方法：1、构造函数初始化 2、Set方法
     sys.exit(app.exec_())

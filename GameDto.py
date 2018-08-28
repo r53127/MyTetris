@@ -6,7 +6,7 @@ class GameDto():
         self.gameAct=[]
         self.next=0
         self.nowLevel=0
-        self.newPoint=0
+        self.nowPoint=0
         self.newRemoveLine=0
 
 

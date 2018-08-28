@@ -3,6 +3,8 @@
 控制画面
 控制游戏逻辑
 '''
+from PyQt5.QtWidgets import QMessageBox
+
 
 class GameControl():
     def __init__(self,gameWindow,gameService):
@@ -11,14 +13,21 @@ class GameControl():
         #游戏逻辑层
         self.gameService=gameService
 
+    def gameTest(self):
+        self.gameService.gameTest()
+        self.gameWindow.update()
+
     def up(self):
-        print('pressed e')
+        try:
+            QMessageBox.information(self.gameWindow,'提示', '不要按我！')
+        except BaseException as e:
+            print('Error is :', e)
 
     def down(self):
-        print('pressed d')
+        QMessageBox.information(self.gameWindow, '提示', '你再按！')
 
     def left(self):
-        print('pressed s')
+        QMessageBox.information(self.gameWindow, '提示', '再按我弄死你！')
 
     def right(self):
-        print('pressed f')
+        QMessageBox.information(self.gameWindow, '提示', '你还按！')
