@@ -6,5 +6,19 @@
 
 class GameControl():
     def __init__(self,gameWindow,gameService):
-        self.panelgame= gameWindow
+        #游戏界面层
+        self.gameWindow= gameWindow
+        #游戏逻辑层
         self.gameService=gameService
+
+    def up(self):
+        print('pressed e')
+
+    def down(self):
+        print('pressed d')
+
+    def left(self):
+        print('pressed s')
+
+    def right(self):
+        print('pressed f')

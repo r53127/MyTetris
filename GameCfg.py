@@ -35,36 +35,15 @@ class LayerCfg():
     @property
     def x(self):
         return self._x
-    @x.setter
-    def x(self,value):
-        if not isinstance(value, int):
-            raise ValueError('x must be an integer!')
-        self._x=value
 
     @property
     def y(self):
         return self._y
-    @y.setter
-    def y(self,value):
-        if not isinstance(value, int):
-            raise ValueError('y must be an integer!')
-        self._y=value
 
     @property
     def w(self):
         return self._w
-    @w.setter
-    def w(self,value):
-        if not isinstance(value, int):
-            raise ValueError('w must be an integer!')
-        self._w=value
 
     @property
     def h(self):
         return self._h
-    @h.setter
-    def h(self,value):
-        if not isinstance(value, int):
-            raise ValueError('h must be an integer!')
-        self._h=value
-

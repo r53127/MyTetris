@@ -1,0 +1,2 @@
+class GameAct():
+    pass

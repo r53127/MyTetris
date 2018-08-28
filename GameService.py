@@ -1,7 +1,7 @@
 '''
 游戏逻辑
-
 '''
 
 class GameService():
-    pass
+    def __init__(self,dto):
+        self.dto=dto

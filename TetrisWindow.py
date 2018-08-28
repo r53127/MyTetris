@@ -4,10 +4,11 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-import GameService
+from GameDto import GameDto
 import LayerClass
 from Const import CONST
 from GameControl import GameControl
+from GameService import GameService
 
 
 class TetrisWindow(QMainWindow):
@@ -15,13 +16,13 @@ class TetrisWindow(QMainWindow):
         super().__init__()
         self.initLayer()
         self.initUI()
-        self.initCtroller()
+        self.initComponent()
 
     def initLayer(self):
         self.layers = []
         for layer in CONST.CFG.layerscfg:  # load layers size ,make layers object
             creator = getattr(LayerClass, layer.classname)  # python reflect mechanism
-            self.layers.append(creator(layer.x, layer.y, layer.w, layer.h))
+            self.layers.append(creator(layer.x, layer.y, layer.w, layer.h))#create and init layers
 
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
@@ -32,10 +33,11 @@ class TetrisWindow(QMainWindow):
         self.setWindowOpacity(1)  # set transparency
         self.show()
 
-    def initCtroller(self):
-        gameService = GameService()
-        gameCtrl = GameControl(self)
+    def initComponent(self):
+        pass
 
+    def setGameControl(self,gameControl):
+        self.gameControl=gameControl
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -47,6 +49,14 @@ class TetrisWindow(QMainWindow):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.close()
+        elif event.key() == Qt.Key_E:
+            self.gameControl.up()
+        elif event.key() == Qt.Key_D:
+            self.gameControl.down()
+        elif event.key() == Qt.Key_S:
+            self.gameControl.left()
+        elif event.key() == Qt.Key_F:
+            self.gameControl.right()
 
     def mouseMoveEvent(self, QMouseEvent):
         if Qt.LeftButton and self.m_drag:
@@ -70,5 +80,14 @@ class TetrisWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    win = TetrisWindow()
+    #创建游戏数据源
+    gameDto=GameDto()
+    #创建游戏面板
+    gameWin = TetrisWindow()
+    #创建游戏逻辑块（连接游戏数据源）
+    gameServ=GameService(gameDto)
+    #创建游戏控制器（链接游戏面板和游戏逻辑块）
+    gameCtrl=GameControl(gameWin,gameServ)
+    #安装游戏控制器
+    gameWin.setGameControl(gameCtrl)
     sys.exit(app.exec_())
