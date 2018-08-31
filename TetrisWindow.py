@@ -2,6 +2,7 @@ import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
+from PyQt5.QtMultimedia import QSound
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 import LayerClass
@@ -12,20 +13,22 @@ from GameService import GameService
 
 
 class TetrisWindow(QMainWindow):
-    def __init__(self, dto):
+    def __init__(self, gameDto):
         super().__init__()
+        #接收传入的游戏数据
+        self.gameDto = gameDto
         self.initLayer()
         self.initUI()
         self.initComponent()
-        self.dto = dto
 
     def initLayer(self):
         self.layers = []
         for layercfg in CONST.CFG.layerscfg:  # load layers size ,make layers object
             creator = getattr(LayerClass, layercfg.classname)  # python reflect mechanism
-            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h)
+            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h)#生成layer
+            layer.setGameDto(self.gameDto)  # 把游戏数据对象传递给layer
             self.layers.append(layer)  # create and init layers
-            # layer.setGameDto(self.dto)  # 把游戏数据对象传递给layer
+
 
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
@@ -50,20 +53,20 @@ class TetrisWindow(QMainWindow):
             self.setCursor(QCursor(Qt.OpenHandCursor))
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.close()
         try:
-            self.gameControl.gameTest()
+            if event.key() == Qt.Key_Escape:
+                self.close()
+            elif event.key() == Qt.Key_Up:
+                self.gameControl.keyUp()
+            elif event.key() == Qt.Key_Down:
+                self.gameControl.keyDown()
+            elif event.key() == Qt.Key_Left:
+                self.gameControl.keyLeft()
+            elif event.key() == Qt.Key_Right:
+                self.gameControl.keyRight()
         except BaseException as e:
-            print('Error is :', e)
-        # elif event.key() == Qt.Key_E:
-        #     self.gameControl.up()
-        # elif event.key() == Qt.Key_D:
-        #     self.gameControl.down()
-        # elif event.key() == Qt.Key_S:
-        #     self.gameControl.left()
-        # elif event.key() == Qt.Key_F:
-        #     self.gameControl.right()
+           print('错误是:',e)
+
 
     def mouseMoveEvent(self, QMouseEvent):
         if Qt.LeftButton and self.m_drag:
@@ -87,6 +90,12 @@ class TetrisWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+
+    #播放背景音乐
+    backmusic=QSound(r"music\backmusic01.wav")
+    backmusic.setLoops(-1)
+    backmusic.play()
+
     # 创建游戏数据源
     gameDto = GameDto()
     # 创建游戏面板(连接游戏数据源)

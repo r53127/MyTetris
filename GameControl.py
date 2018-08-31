@@ -13,21 +13,18 @@ class GameControl():
         #游戏逻辑层
         self.gameService=gameService
 
-    def gameTest(self):
-        self.gameService.gameTest()
+    def keyUp(self):
+        self.gameService.keyUp()
         self.gameWindow.update()
 
-    def up(self):
-        try:
-            QMessageBox.information(self.gameWindow,'提示', '不要按我！')
-        except BaseException as e:
-            print('Error is :', e)
+    def keyDown(self):
+        self.gameService.keyDown()
+        self.gameWindow.update()
 
-    def down(self):
-        QMessageBox.information(self.gameWindow, '提示', '你再按！')
+    def keyLeft(self):
+        self.gameService.keyLeft()
+        self.gameWindow.update()
 
-    def left(self):
-        QMessageBox.information(self.gameWindow, '提示', '再按我弄死你！')
-
-    def right(self):
-        QMessageBox.information(self.gameWindow, '提示', '你还按！')
+    def keyRight(self):
+        self.gameService.keyRight()
+        self.gameWindow.update()

@@ -1,12 +1,18 @@
+'''
+游戏界面图层
+'''
+
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtGui import QImage
-from PyQt5.QtWidgets import QFrame
 
 from Const import CONST
 
-FRMAEIMG = CONST.FrameImg
-SIZE = CONST.CFG.cornersize # pic cornor width : 7 pixel
-PADDING = CONST.CFG.padding # pic padding : 16 pixel
+FRMAEIMG = CONST.FrameImg  #边框图片
+SIZE = CONST.CFG.cornersize  # pic cornor width : 7 pixel
+PADDING = CONST.CFG.padding  # pic padding : 16 pixel
+ACT = CONST.ActImg #方块图片
+ACT_SIZE=32 #方块边长32像素
+
 
 class LayerClass():
     def __init__(self, x, y, w, h):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
@@ -17,9 +23,8 @@ class LayerClass():
         self.imgW = QImage(FRMAEIMG).width()
         self.imgH = QImage(FRMAEIMG).height()
 
-    def setGameDto(self,dto):
-        self.dto=dto
-        print('install dto to layer')
+    def setGameDto(self, gameDto):
+        self.gameDto = gameDto
 
     def createlayer(self, painter):
         # 左上
@@ -58,6 +63,32 @@ class LayerClass():
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
 
+class GameLayer(LayerClass):
+    def __init__(self, x, y, w, h):
+        #初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h)
+
+    def paint(self, painter):
+        self.createlayer(painter)
+        actPoints = self.gameDto.gameAct.actPoints
+        #打印方块
+        for point in actPoints:
+            self.drawRect(point[0], point[1], painter,self.gameDto.gameAct.rectCode)
+        # 打印地图
+        gameMap=self.gameDto.gameMap
+        for mapX in range(len(gameMap)):
+            for mapY in range(len(gameMap[mapX])):
+                if gameMap[mapX][mapY]:
+                    self.drawRect(mapX, mapY, painter,1)  #使用0号方块作为固定方块
+
+    #画方块
+    def drawRect(self, mapX, mapY, painter,rectCode):
+        painter.drawImage(
+            QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
+                  ACT_SIZE), QImage(ACT),
+            QRect(rectCode*32, 0, ACT_SIZE, ACT_SIZE))
+
+
 class DBLayer(LayerClass):
     def __init__(self, x, y, w, h):
         super().__init__(x, y, w, h)
@@ -74,15 +105,6 @@ class WorldLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.WorldImg))
-
-
-class GameLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
-
-    def paint(self, painter):
-        self.createlayer(painter)
-
 
 
 class ButtonLayer(LayerClass):
@@ -118,7 +140,6 @@ class PointLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.ScoreImg))
-        painter.drawText(QPoint(self.x+100,self.y+100),str(self.dto.nowPoint))
 
 
 class AboutLayer(LayerClass):
@@ -128,4 +149,3 @@ class AboutLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING + 10, self.y + PADDING), QImage(CONST.LogoImg))
-
