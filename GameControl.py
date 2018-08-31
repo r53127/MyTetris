@@ -3,7 +3,6 @@
 控制画面
 控制游戏逻辑
 '''
-from PyQt5.QtWidgets import QMessageBox
 
 
 class GameControl():
@@ -27,4 +26,8 @@ class GameControl():
 
     def keyRight(self):
         self.gameService.keyRight()
+        self.gameWindow.update()
+
+    def keySteal(self):
+        self.gameService.keyspaceDown()
         self.gameWindow.update()

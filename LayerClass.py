@@ -7,11 +7,11 @@ from PyQt5.QtGui import QImage
 
 from Const import CONST
 
-FRMAEIMG = CONST.FrameImg  #边框图片
+FRMAEIMG = CONST.FrameImg  # 边框图片
 SIZE = CONST.CFG.cornersize  # pic cornor width : 7 pixel
 PADDING = CONST.CFG.padding  # pic padding : 16 pixel
-ACT = CONST.ActImg #方块图片
-ACT_SIZE=32 #方块边长32像素
+ACT = CONST.ActImg  # 方块图片
+ACT_SIZE = 32  # 方块边长32像素
 
 
 class LayerClass():
@@ -62,31 +62,31 @@ class LayerClass():
                           QImage(FRMAEIMG),
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
+    # 画方块
+    def drawRect(self, mapX, mapY, painter, rectCode):
+        painter.drawImage(
+            QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
+                  ACT_SIZE), QImage(ACT),
+            QRect(rectCode * 32, 0, ACT_SIZE, ACT_SIZE))
+
 
 class GameLayer(LayerClass):
     def __init__(self, x, y, w, h):
-        #初始化层的x/y坐标和长度/宽度
+        # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h)
 
     def paint(self, painter):
         self.createlayer(painter)
         actPoints = self.gameDto.gameAct.actPoints
-        #打印方块
+        # 打印方块
         for point in actPoints:
-            self.drawRect(point[0], point[1], painter,self.gameDto.gameAct.rectCode)
+            self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
         # 打印地图
-        gameMap=self.gameDto.gameMap
+        gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    self.drawRect(mapX, mapY, painter,1)  #使用0号方块作为固定方块
-
-    #画方块
-    def drawRect(self, mapX, mapY, painter,rectCode):
-        painter.drawImage(
-            QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
-                  ACT_SIZE), QImage(ACT),
-            QRect(rectCode*32, 0, ACT_SIZE, ACT_SIZE))
+                    self.drawRect(mapX, mapY, painter, 1)  # 使用0号方块作为固定方块
 
 
 class DBLayer(LayerClass):
@@ -122,6 +122,14 @@ class NextLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
+        nextPoints = []
+        for point in CONST.rectTable[self.gameDto.next]:
+            nextPoints.append([point[0], point[1]])
+        for point in nextPoints:
+            painter.drawImage(
+                QRect(self.x + point[0] * ACT_SIZE + SIZE + 30, self.y + point[1] * ACT_SIZE + SIZE + 30, ACT_SIZE,
+                      ACT_SIZE), QImage(ACT),
+                QRect(self.gameDto.next * 32, 0, ACT_SIZE, ACT_SIZE))
 
 
 class LevelLayer(LayerClass):

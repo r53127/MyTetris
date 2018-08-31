@@ -64,6 +64,8 @@ class TetrisWindow(QMainWindow):
                 self.gameControl.keyLeft()
             elif event.key() == Qt.Key_Right:
                 self.gameControl.keyRight()
+            elif event.key() == Qt.Key_Space:
+                self.gameControl.keySteal()
         except BaseException as e:
            print('错误是:',e)
 
