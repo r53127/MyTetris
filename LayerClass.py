@@ -12,7 +12,7 @@ FRMAEIMG = CONST.FrameImg  # 边框图片
 SIZE = CONST.CFG.cornersize  # pic cornor width : 7 pixel
 PADDING = CONST.CFG.padding  # pic padding : 16 pixel
 ACT = CONST.ActImg  # 方块图片
-ACT_SIZE = 32  # 方块边长32像素
+ACT_SIZE = CONST.Act_Size  # 方块边长32像素
 
 OVERWIDTH = QImage(CONST.OverImg).width()
 OVERHEIGHT = QImage(CONST.OverImg).height()

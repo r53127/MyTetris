@@ -15,6 +15,7 @@ class CONST():
     ActImg = "Graphics/game/rect.png"
     BackImg = "Graphics/Backgroud/screen1.jpg"
     OverImg="Graphics/game/over.png"
+    Act_Size=32#方块像素
 
     NoShape = 0
     ZShape = 1
@@ -33,6 +34,6 @@ class CONST():
         ((1, 0), (0, 0), (2, 0), (3, 0)),
         ((1, 0), (0, 0), (2, 0), (1, 1)),
         ((1, 0), (0, 0), (0, 1), (1, 1)),
-        ((0, 1), (0, 0), (0, 2), (1, 2)),
+        ((1, 0), (0, 0), (2, 0), (3, 0)),
         ((1, 1), (1, 0), (1, 2), (0, 2))
     )

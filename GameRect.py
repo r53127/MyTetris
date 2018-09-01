@@ -1,7 +1,5 @@
 import random
 
-from PyQt5.QtMultimedia import QSound
-
 from Const import CONST
 
 MIN_X = 0
@@ -18,7 +16,7 @@ class GameRect():
         self.rectCode=rectCode  ##界面层需要方块编号选择不同颜色
         self.actPoints = []
         xOffset=random.randint(0,6)#随机位置出方块
-        for point in CONST.rectTable[rectCode]:
+        for point in CONST.rectTable[rectCode]:#初始化坐标
             self.actPoints.append([point[0]+xOffset,point[1]])
 
     def isOverZone(self, newX, newY,gameMap):

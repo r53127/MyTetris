@@ -3,9 +3,7 @@
 '''
 import random
 
-from PyQt5.QtCore import QTimer
 from PyQt5.QtMultimedia import QSound
-from PyQt5.QtWidgets import QMessageBox, QWidget
 
 
 class GameService():
@@ -19,31 +17,29 @@ class GameService():
             self.dto.gameMap =[[0] * self.dto.gameHeight for i in range(self.dto.gameWidth)]
             self.dto.gameAct.initRect(random.randint(1,7))
 
-
-
     def keyUp(self):
         if self.dto.isPaused:#暂停
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):
+        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
             self.dto.gameAct.rotate(self.dto.gameMap, self.dto.gameAct.rectCode)
             QSound.play("music\move.wav")
 
     def keyLeft(self):
         if self.dto.isPaused:#暂停
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):
+        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
             self.dto.gameAct.move(-1, 0, self.dto.gameMap)
 
     def keyRight(self):
         if self.dto.isPaused:#暂停
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):
+        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
             self.dto.gameAct.move(1, 0, self.dto.gameMap)
 
     def keyDown(self):
         if self.dto.isPaused:#暂停
             return False
-        if (self.dto.isStart==0) or (self.dto.isLose==1):
+        if (self.dto.isStart==0) or (self.dto.isLose==1):#未开始或者输了
             return False ##不能下移
         if self.dto.gameAct.move(0, 1, self.dto.gameMap):
             QSound.play("music\move.wav")
@@ -62,6 +58,7 @@ class GameService():
         self.dto.next = random.randint(1, 7)
         ##判断游戏是否结束
         if self.isLosed():
+            QSound.play(r"music\lose.wav")
             return False ##不能再下移
 
     def isLosed(self):
@@ -70,8 +67,6 @@ class GameService():
                 self.dto.isStart = 0
                 self.dto.isLose = 1
                 return True
-
-
 
     def plusExp(self):
         pass

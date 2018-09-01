@@ -3,7 +3,6 @@
 控制画面
 控制游戏逻辑
 '''
-import random
 
 from PyQt5.QtCore import QTimer
 
