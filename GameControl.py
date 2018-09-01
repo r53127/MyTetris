@@ -33,26 +33,37 @@ class GameControl():
         self.gameWindow.update()
 
     def keyFastdown(self):
-        canFallFlag=self.gameService.keyDown()
-        while canFallFlag:
-            canFallFlag=self.gameService.keyDown()
+        if self.gameWindow.gameDto.isPaused:
+            return
+        iscanFastfall=self.gameService.keyDown()
+        while iscanFastfall:
+            iscanFastfall=self.gameService.keyDown()
+        self.gameWindow.update()
 
     def keyStart(self):
-        if self.gameWindow.gameDto.isStart==0:
-            self.gameWindow.gameDto.isStart=1
-            self.gameWindow.gameDto.gameAct.initRect(random.randint(1,7))
-            self.timer = QTimer()
-            self.timer.setInterval(500)
-            self.timer.timeout.connect(self.keyDown)
-            self.timer.start()
+        self.gameService.startGame()
+        self.timer = QTimer()
+        self.timer.setInterval(500)
+        self.timer.timeout.connect(self.keyDown)
+        self.timer.timeout.connect(self.resetTimer)
+        self.timer.start()
+        self.gameWindow.update()
+
+    def resetTimer(self):
+        if self.gameWindow.gameDto.isLose:
+            self.timer.timeout.disconnect(self.keyDown)
+            self.timer.stop()
+
 
     def keyPause(self):
-        if self.gameWindow.gameDto.isStart:
-            self.timer.timeout.disconnect(self.keyDown)
-            self.gameWindow.gameDto.isStart=0
+        if not self.gameWindow.gameDto.isStart:
+            return
+        if not self.gameWindow.gameDto.isPaused:
+            self.timer.stop()
+            self.gameWindow.gameDto.isPaused = 1
         else:
-            self.timer.timeout.connect(self.keyDown)
-            self.gameWindow.gameDto.isStart = 1
+            self.timer.start()
+            self.gameWindow.gameDto.isPaused = 0
 
     def keyTest(self):
         pass

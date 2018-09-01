@@ -14,6 +14,7 @@ class CONST():
     RmlineImg = "Graphics/game/rmline.png"
     ActImg = "Graphics/game/rect.png"
     BackImg = "Graphics/Backgroud/screen1.jpg"
+    OverImg="Graphics/game/over.png"
 
     NoShape = 0
     ZShape = 1

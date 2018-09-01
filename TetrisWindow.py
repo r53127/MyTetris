@@ -70,7 +70,7 @@ class TetrisWindow(QMainWindow):
             elif event.key() == Qt.Key_Space:
                 self.gameControl.keyFastdown()
             elif event.key() == Qt.Key_T:
-                self.gameControl.keyStart()
+                self.gameControl.keyTest()
             elif event.key() == Qt.Key_S:
                 self.gameControl.keyStart()
             elif event.key() == Qt.Key_P:

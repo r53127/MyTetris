@@ -18,8 +18,9 @@ class GameDto():
         self.nowLevel=0
         self.nowPoint=0
         self.nowRemoveLine=0
-        self.isStart=0
-        self.isLose=0
+        self.isStart=0##游戏开始标志 0表述没开始，1表示开始了
+        self.isLose=0##游戏失败标志 0表示没输，1表示输了
+        self.isPaused=0
 
 
 

@@ -14,6 +14,9 @@ PADDING = CONST.CFG.padding  # pic padding : 16 pixel
 ACT = CONST.ActImg  # 方块图片
 ACT_SIZE = 32  # 方块边长32像素
 
+OVERWIDTH = QImage(CONST.OverImg).width()
+OVERHEIGHT = QImage(CONST.OverImg).height()
+
 
 class LayerClass():
     def __init__(self, x, y, w, h):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
@@ -78,16 +81,23 @@ class GameLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        # 打印方块
+        # 打印下落方块
         if self.gameDto.isStart==1 and self.gameDto.isLose==0:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
+        elif self.gameDto.isLose==1:
+            for point in self.gameDto.gameAct.actPoints:
+                self.drawRect(point[0], point[1], painter, 8)
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    self.drawRect(mapX, mapY, painter, 1)  # 使用0号方块作为固定方块
+                    if self.gameDto.isLose==0:
+                        self.drawRect(mapX, mapY, painter, 1)  # 使用1号方块作为固定方块
+                    elif self.gameDto.isLose==1:
+                        self.drawRect(mapX, mapY, painter, 8)  # 使用8号方块作为失败方块
+                        painter.drawImage(QPoint(self.x + (self.w-OVERWIDTH)/2+PADDING, self.y+(self.h-OVERHEIGHT)/2 + PADDING), QImage(CONST.OverImg))
 
 
 class DBLayer(LayerClass):
