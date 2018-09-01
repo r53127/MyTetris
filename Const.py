@@ -13,6 +13,7 @@ class CONST():
     ScoreImg = "Graphics/game/score.png"
     RmlineImg = "Graphics/game/rmline.png"
     ActImg = "Graphics/game/rect.png"
+    BackImg = "Graphics/Backgroud/screen1.jpg"
 
     NoShape = 0
     ZShape = 1
@@ -23,7 +24,7 @@ class CONST():
     LShape = 6
     MirroredLShape = 7
 
-    #方块坐标表
+    # 方块坐标表
     rectTable = (
         ((0, 0), (0, 0), (0, 0), (0, 0)),
         ((1, 0), (0, 0), (1, 1), (2, 1)),

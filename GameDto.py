@@ -17,7 +17,9 @@ class GameDto():
         self.next=random.randint(1,7)
         self.nowLevel=0
         self.nowPoint=0
-        self.newRemoveLine=0
+        self.nowRemoveLine=0
+        self.isStart=0
+        self.isLose=0
 
 
 

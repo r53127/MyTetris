@@ -1,9 +1,10 @@
 '''
 游戏界面图层
 '''
+import random
 
 from PyQt5.QtCore import QRect, QPoint
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QPixmap
 
 from Const import CONST
 
@@ -77,10 +78,10 @@ class GameLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        actPoints = self.gameDto.gameAct.actPoints
         # 打印方块
-        for point in actPoints:
-            self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
+        if self.gameDto.isStart==1 and self.gameDto.isLose==0:
+            for point in self.gameDto.gameAct.actPoints:
+                self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
@@ -122,14 +123,16 @@ class NextLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        nextPoints = []
-        for point in CONST.rectTable[self.gameDto.next]:
-            nextPoints.append([point[0], point[1]])
-        for point in nextPoints:
-            painter.drawImage(
-                QRect(self.x + point[0] * ACT_SIZE + SIZE + 30, self.y + point[1] * ACT_SIZE + SIZE + 30, ACT_SIZE,
-                      ACT_SIZE), QImage(ACT),
-                QRect(self.gameDto.next * 32, 0, ACT_SIZE, ACT_SIZE))
+        # 打印下一个方块
+        if self.gameDto.isStart==1 and self.gameDto.isLose==0:
+            nextPoints = []
+            for point in CONST.rectTable[self.gameDto.next]:
+                nextPoints.append([point[0], point[1]])
+            for point in nextPoints:
+                painter.drawImage(
+                    QRect(self.x + point[0] * ACT_SIZE + SIZE + 30, self.y + point[1] * ACT_SIZE + SIZE + 30, ACT_SIZE,
+                          ACT_SIZE), QImage(ACT),
+                    QRect(self.gameDto.next * 32, 0, ACT_SIZE, ACT_SIZE))
 
 
 class LevelLayer(LayerClass):
@@ -157,3 +160,11 @@ class AboutLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING + 10, self.y + PADDING), QImage(CONST.LogoImg))
+
+class BackLayer(LayerClass):
+    def __init__(self, x, y, w, h):
+        super().__init__(x, y, w, h)
+        self.BackImg="Graphics/Backgroud/00"+str(random.randint(1,9))+".jpg"
+
+    def paint(self, painter):
+        painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.BackImg))

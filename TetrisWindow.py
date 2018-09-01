@@ -33,6 +33,9 @@ class TetrisWindow(QMainWindow):
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
         self.setWindowIcon(QIcon('Graphics\windows\windows.png'))
+        # desktop=QApplication.desktop()
+        # self.pix=desktop.availableGeometry()
+        # self.setGeometry(self.pix)
         self.pix = QBitmap("Graphics/Backgroud/mask3.png")
         self.resize(self.pix.size())  # Masking panel pic size：1162*654
         self.setMask(self.pix)
@@ -65,7 +68,13 @@ class TetrisWindow(QMainWindow):
             elif event.key() == Qt.Key_Right:
                 self.gameControl.keyRight()
             elif event.key() == Qt.Key_Space:
-                self.gameControl.keySteal()
+                self.gameControl.keyFastdown()
+            elif event.key() == Qt.Key_T:
+                self.gameControl.keyStart()
+            elif event.key() == Qt.Key_S:
+                self.gameControl.keyStart()
+            elif event.key() == Qt.Key_P:
+                self.gameControl.keyPause()
         except BaseException as e:
            print('错误是:',e)
 
@@ -83,7 +92,6 @@ class TetrisWindow(QMainWindow):
     def paintEvent(self, QPaintEvent):
         try:
             painter = QPainter(self)
-            painter.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap("Graphics/Backgroud/screen1.jpg"))
             for layer in self.layers:
                 layer.paint(painter)  # 显示layer
         except BaseException as e:
