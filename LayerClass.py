@@ -82,20 +82,20 @@ class GameLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         # 打印下落方块
-        if self.gameDto.isStart==1 and self.gameDto.isLose==0:
+        if self.gameDto.isStarted==1 and self.gameDto.isLosed==0:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
-        elif self.gameDto.isLose==1:
+        elif self.gameDto.isLosed==1:
             for point in self.gameDto.gameAct.actPoints:
-                self.drawRect(point[0], point[1], painter, 8)
+                self.drawRect(point[0], point[1], painter, 8)# 使用8号方块作为失败方块
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    if self.gameDto.isLose==0:
+                    if self.gameDto.isLosed==0:
                         self.drawRect(mapX, mapY, painter, 1)  # 使用1号方块作为固定方块
-                    elif self.gameDto.isLose==1:
+                    elif self.gameDto.isLosed==1:
                         self.drawRect(mapX, mapY, painter, 8)  # 使用8号方块作为失败方块
                         painter.drawImage(QPoint(self.x + (self.w-OVERWIDTH)/2+PADDING, self.y+(self.h-OVERHEIGHT)/2 + PADDING), QImage(CONST.OverImg))
 
@@ -134,7 +134,7 @@ class NextLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         # 打印下一个方块
-        if self.gameDto.isStart==1 and self.gameDto.isLose==0:
+        if self.gameDto.isStarted==1 and self.gameDto.isLosed==0:
             nextPoints = []
             for point in CONST.rectTable[self.gameDto.next]:
                 nextPoints.append([point[0], point[1]])

@@ -11,35 +11,30 @@ class GameService():
         self.dto = dto
 
     def startGame(self):
-        if self.dto.isStart==0:
-            self.dto.isLose= 0
-            self.dto.isStart=1
+        if self.dto.isStarted==0:
+            self.dto.isLosed= 0
+            self.dto.isStarted=1
             self.dto.gameMap =[[0] * self.dto.gameHeight for i in range(self.dto.gameWidth)]
             self.dto.gameAct.initRect(random.randint(1,7))
 
     def keyUp(self):
-        if self.dto.isPaused:#暂停
+        if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:##暂停或未开始或输了
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
-            self.dto.gameAct.rotate(self.dto.gameMap, self.dto.gameAct.rectCode)
-            QSound.play("music\move.wav")
+        self.dto.gameAct.rotate(self.dto.gameMap, self.dto.gameAct.rectCode)
+        QSound.play("music\move.wav")
 
     def keyLeft(self):
-        if self.dto.isPaused:#暂停
+        if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:##暂停或未开始或输了
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
-            self.dto.gameAct.move(-1, 0, self.dto.gameMap)
+        self.dto.gameAct.move(-1, 0, self.dto.gameMap)
 
     def keyRight(self):
-        if self.dto.isPaused:#暂停
+        if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:##暂停或未开始或输了
             return
-        if (self.dto.isStart==1) and (self.dto.isLose==0):#开始了且没输
-            self.dto.gameAct.move(1, 0, self.dto.gameMap)
+        self.dto.gameAct.move(1, 0, self.dto.gameMap)
 
     def keyDown(self):
-        if self.dto.isPaused:#暂停
-            return False
-        if (self.dto.isStart==0) or (self.dto.isLose==1):#未开始或者输了
+        if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:##暂停或未开始或输了
             return False ##不能下移
         if self.dto.gameAct.move(0, 1, self.dto.gameMap):
             QSound.play("music\move.wav")
@@ -57,15 +52,18 @@ class GameService():
         self.dto.gameAct.initRect(self.dto.next)
         self.dto.next = random.randint(1, 7)
         ##判断游戏是否结束
-        if self.isLosed():
-            QSound.play(r"music\lose.wav")
+        if self.checkLosed():
+            self.afterLosed()#输了以后的操作
             return False ##不能再下移
 
-    def isLosed(self):
+    def afterLosed(self):
+        self.dto.isStarted = 0
+        self.dto.isLosed = 1
+        QSound.play(r"music\lose.wav")
+
+    def checkLosed(self):
         for point in self.dto.gameAct.actPoints:
             if self.dto.gameMap[point[0]][point[1]]:
-                self.dto.isStart = 0
-                self.dto.isLose = 1
                 return True
 
     def plusExp(self):
@@ -86,11 +84,11 @@ class GameService():
                 return False
         return True
 
-    def removeLine(self, rowNumber):
+    def removeLine(self, rowNumber): #删除该行
         y = rowNumber  # 给定行号
         while y > 0:
             for x in range(self.dto.gameWidth):
-                self.dto.gameMap[x][y] = self.dto.gameMap[x][y - 1]  # 把上一行的方块移动该行
+                self.dto.gameMap[x][y] = self.dto.gameMap[x][y - 1]  # 把上一行的方块移动到该行
             y = y - 1  # 行往上移
         else:
             for x in range(self.dto.gameWidth):

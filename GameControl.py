@@ -34,9 +34,13 @@ class GameControl():
     def keyFastdown(self):
         if self.gameWindow.gameDto.isPaused:
             return
-        iscanFastfall=self.gameService.keyDown()
-        while iscanFastfall:
-            iscanFastfall=self.gameService.keyDown()
+        # iscanFastfall=self.gameService.keyDown()
+        # while iscanFastfall:
+        #     iscanFastfall=self.gameService.keyDown()
+        ##循环代码优化
+        while(1):
+            if not self.gameService.keyDown():
+                break
         self.gameWindow.update()
 
     def keyStart(self):
@@ -49,20 +53,26 @@ class GameControl():
         self.gameWindow.update()
 
     def resetTimer(self):
-        if self.gameWindow.gameDto.isLose:
+        if self.gameWindow.gameDto.isLosed:
             self.timer.timeout.disconnect(self.keyDown)
             self.timer.stop()
 
 
     def keyPause(self):
-        if not self.gameWindow.gameDto.isStart:
+        if not self.gameWindow.gameDto.isStarted:
             return
-        if not self.gameWindow.gameDto.isPaused:
-            self.timer.stop()
-            self.gameWindow.gameDto.isPaused = 1
-        else:
+        # if not self.gameWindow.gameDto.isPaused:
+        #     self.timer.stop()
+        #     self.gameWindow.gameDto.isPaused = 1
+        # else:
+        #     self.timer.start()
+        #     self.gameWindow.gameDto.isPaused = 0
+        ##典型开关型代码优化
+        if self.gameWindow.gameDto.isPaused:
             self.timer.start()
-            self.gameWindow.gameDto.isPaused = 0
+        else:
+            self.timer.stop()
+        self.gameWindow.gameDto.isPaused= not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
         pass
