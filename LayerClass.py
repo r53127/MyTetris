@@ -14,8 +14,8 @@ PADDING = CONST.CFG.padding  # pic padding : 16 pixel
 ACT = CONST.ActImg  # 方块图片
 ACT_SIZE = CONST.Act_Size  # 方块边长32像素
 
-OVERWIDTH = QImage(CONST.OverImg).width()
-OVERHEIGHT = QImage(CONST.OverImg).height()
+NUMWIDTH=QImage(CONST.NumImge).width()/10#数字宽度
+NUMHEIGHT=QImage(CONST.NumImge).height()#数字高度
 
 
 class LayerClass():
@@ -73,6 +73,17 @@ class LayerClass():
                   ACT_SIZE), QImage(ACT),
             QRect(rectCode * 32, 0, ACT_SIZE, ACT_SIZE))
 
+        # 打印图片数字
+        # x,y 为框内坐标
+        # num 为要打印的数字
+        #numberSize为原字体比例
+    def drawNumberAlignRight(self, num, x, y, painter,numberSize=1):
+        finished = 0  # 已打印字符数
+        for i in reversed(list(str(num))):#逆序打印
+            finished = finished + 1
+            painter.drawImage(QRect(self.x + x - finished * NUMWIDTH, self.y + y, NUMWIDTH*numberSize,NUMHEIGHT*numberSize),
+                              QImage(CONST.NumImge),
+                              QRect(int(i) * NUMWIDTH, 0, NUMWIDTH, NUMHEIGHT))
 
 class GameLayer(LayerClass):
     def __init__(self, x, y, w, h):
@@ -80,6 +91,8 @@ class GameLayer(LayerClass):
         super().__init__(x, y, w, h)
 
     def paint(self, painter):
+        OVERWIDTH = QImage(CONST.OverImg).width()
+        OVERHEIGHT = QImage(CONST.OverImg).height()
         self.createlayer(painter)
         # 打印下落方块
         if self.gameDto.isStarted==1 and self.gameDto.isLosed==0:
@@ -125,6 +138,7 @@ class ButtonLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING + 20, self.y + PADDING + 20), QImage(CONST.StartImg))
+        painter.drawImage(QPoint(self.x + PADDING + 60+QImage(CONST.StartImg).width(), self.y + PADDING + 20), QImage(CONST.SetupImg))
 
 
 class NextLayer(LayerClass):
@@ -151,7 +165,12 @@ class LevelLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.LevelImg))
+        levelImgWidth = QImage(CONST.LevelImg).width()
+        levelImgHeight = QImage(CONST.LevelImg).height()
+        centerx=(self.w-levelImgWidth)/2
+        painter.drawImage(QPoint(self.x + centerx, self.y + PADDING), QImage(CONST.LevelImg))
+        self.drawNumberAlignRight(self.gameDto.nowLevel,self.w*3/4,(self.h-levelImgHeight)/2,painter)
+
 
 
 class PointLayer(LayerClass):
@@ -160,7 +179,11 @@ class PointLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.ScoreImg))
+        scoreImgHeight = QImage(CONST.ScoreImg).height()
+        painter.drawImage(QPoint(self.x+SIZE , self.y+SIZE), QImage(CONST.ScoreImg))
+        painter.drawImage(QPoint(self.x+SIZE, self.y+scoreImgHeight+SIZE), QImage(CONST.RmlineImg))
+        self.drawNumberAlignRight(self.gameDto.nowPoint,self.w,0,painter,0.7)
+        self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, scoreImgHeight, painter, 0.7)
 
 
 class AboutLayer(LayerClass):

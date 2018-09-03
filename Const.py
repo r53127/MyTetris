@@ -8,14 +8,15 @@ class CONST():
     DBImg = "Graphics/game/db.png"
     WorldImg = "Graphics/game/world.png"
     StartImg = "Graphics/game/start.png"
-    ExitImg = "Graphics/game/exit.png"
     LevelImg = "Graphics/game/level.png"
     ScoreImg = "Graphics/game/score.png"
     RmlineImg = "Graphics/game/rmline.png"
     ActImg = "Graphics/game/rect.png"
     BackImg = "Graphics/Backgroud/screen1.jpg"
-    OverImg="Graphics/game/over.png"
-    Act_Size=32#方块像素
+    OverImg = "Graphics/game/over.png"
+    NumImge = "Graphics/game/number.png"
+    SetupImg = "Graphics/game/setup.png"
+    Act_Size = 32  # 方块像素
 
     NoShape = 0
     ZShape = 1

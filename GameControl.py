@@ -44,6 +44,8 @@ class GameControl():
         self.gameWindow.update()
 
     def keyStart(self):
+        if self.gameWindow.gameDto.isStarted or self.gameWindow.gameDto.isPaused:
+            return
         self.gameService.startGame()
         self.timer = QTimer()
         self.timer.setInterval(500)
@@ -75,5 +77,8 @@ class GameControl():
         self.gameWindow.gameDto.isPaused= not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
-        pass
+        self.gameWindow.gameDto.nowRemoveLine=self.gameWindow.gameDto.nowRemoveLine+1
+        self.gameWindow.gameDto.nowPoint=self.gameWindow.gameDto.nowRemoveLine*10
+        self.gameWindow.gameDto.nowLevel = int(self.gameWindow.gameDto.nowPoint/200)
+        self.gameWindow.update()
 
