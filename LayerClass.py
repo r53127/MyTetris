@@ -147,6 +147,11 @@ class DBLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.DBImg))
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height()+20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 60, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 100, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 140, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 180, 'NO DATA')
 
 
 class WorldLayer(LayerClass):
@@ -156,6 +161,11 @@ class WorldLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.WorldImg))
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height()+20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 60, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 100, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 140, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 180, 'NO DATA')
 
 
 class ButtonLayer(LayerClass):
