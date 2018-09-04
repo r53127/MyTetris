@@ -67,6 +67,8 @@ class LayerClass():
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
     # 画方块
+    #mapX,mapY为地图格数
+    #rectCode为单个方块在方块图片中的编号
     def drawRect(self, mapX, mapY, painter, rectCode):
         painter.drawImage(
             QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
