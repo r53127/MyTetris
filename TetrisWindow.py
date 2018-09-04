@@ -35,10 +35,11 @@ class TetrisWindow(QMainWindow):
         # desktop=QApplication.desktop()
         # self.pix=desktop.availableGeometry()
         # self.setGeometry(self.pix)
-        self.pix = QBitmap("Graphics/Backgroud/mask3.png")
-        self.resize(self.pix.size())  # Masking panel pic size：1162*654
-        self.setMask(self.pix)
-        # self.resize(1162,654)
+        # self.pix = QBitmap("Graphics/Backgroud/mask3.png")
+        # self.resize(self.pix.size())  # Masking panel pic size：1162*654
+        # self.setMask(self.pix)
+        self.resize(1162,654)
+        self.setWindowFlag(Qt.MSWindowsFixedSizeDialogHint)
         self.setWindowOpacity(1)  # set transparency
         self.show()
 

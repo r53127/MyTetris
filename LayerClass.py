@@ -267,7 +267,7 @@ class BackLayer(LayerClass):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
-        self.BackImg = "Graphics/Backgroud/00" + str(random.randint(1, 9)) + ".jpg"
 
     def paint(self, painter):
+        self.BackImg = "Graphics/Backgroud/00" + str(self.gameDto.nowLevel%9) + ".jpg"
         painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.BackImg))
