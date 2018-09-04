@@ -11,7 +11,7 @@ class GameService():
         self.dto = dto
 
     def startGame(self):
-        if self.dto.isStarted == 0:
+        if not self.dto.isStarted:
             self.dto.isLosed = 0
             self.dto.isStarted = 1
             self.dto.nowRemoveLine = 0
@@ -52,7 +52,7 @@ class GameService():
             self.dto.nowRemoveLine += removedLines
             self.dto.nowPoint += removedLines ** 2 * 10
             ##升级
-            self.dto.nowLevel += int(self.dto.nowPoint / 200)
+            self.dto.nowLevel = int(self.dto.nowPoint / 200)
         ##刷新一个新的方块
         self.dto.gameAct.initRect(self.dto.next)
         self.dto.next = random.randint(1, 7)

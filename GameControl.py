@@ -77,8 +77,8 @@ class GameControl():
         self.gameWindow.gameDto.isPaused= not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
-        self.gameWindow.gameDto.nowRemoveLine=self.gameWindow.gameDto.nowRemoveLine+1
-        self.gameWindow.gameDto.nowPoint=self.gameWindow.gameDto.nowRemoveLine*10
+        self.gameWindow.gameDto.nowRemoveLine+=1
+        self.gameWindow.gameDto.nowPoint+=10
         self.gameWindow.gameDto.nowLevel = int(self.gameWindow.gameDto.nowPoint/200)
         self.gameWindow.update()
 
