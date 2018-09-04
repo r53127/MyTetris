@@ -1,9 +1,9 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
+from PyQt5.QtGui import QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtMultimedia import QSound
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
 import LayerClass
 from Const import CONST
@@ -15,21 +15,19 @@ from GameService import GameService
 class TetrisWindow(QMainWindow):
     def __init__(self, gameDto):
         super().__init__()
-        #接收传入的游戏数据
+        # 接收传入的游戏数据
         self.gameDto = gameDto
         self.initLayer()
         self.initComponent()
         self.initUI()
 
-
     def initLayer(self):
         self.layers = []
         for layercfg in CONST.CFG.layerscfg:  # load layers size ,make layers object
             creator = getattr(LayerClass, layercfg.classname)  # python reflect mechanism
-            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h,self)#生成layer
+            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h, self)  # 生成layer
             layer.setGameDto(self.gameDto)  # 把游戏数据对象传递给layer
             self.layers.append(layer)  # create and init layers
-
 
     def initUI(self):
         self.setWindowTitle('多多大战俄罗斯方块')
@@ -79,8 +77,7 @@ class TetrisWindow(QMainWindow):
             elif event.key() == Qt.Key_P:
                 self.gameControl.keyPause()
         except BaseException as e:
-           print('错误是:',e)
-
+            print('错误是:', e)
 
     def mouseMoveEvent(self, QMouseEvent):
         if Qt.LeftButton and self.m_drag:
@@ -105,8 +102,8 @@ class TetrisWindow(QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    #播放背景音乐
-    backmusic=QSound(r"music\backmusic01.wav")
+    # 播放背景音乐
+    backmusic = QSound(r"music\backmusic01.wav")
     backmusic.setLoops(-1)
     backmusic.play()
 

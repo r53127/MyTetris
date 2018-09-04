@@ -21,12 +21,13 @@ NUMHEIGHT = QImage(CONST.NumImge).height()  # 数字高度
 
 
 class LayerClass():
-    def __init__(self, x, y, w, h,parent=None):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
+    def __init__(self, x, y, w, h,
+                 parent=None):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
         self.x = x
         self.y = y
         self.w = w
         self.h = h
-        self.parent=parent
+        self.parent = parent
         self.imgW = QImage(FRMAEIMG).width()
         self.imgH = QImage(FRMAEIMG).height()
 
@@ -73,6 +74,8 @@ class LayerClass():
     # mapX,mapY为地图格数
     # rectCode为单个方块在方块图片中的编号
     def drawRect(self, mapX, mapY, painter, rectCode):
+        if self.gameDto.isLosed:
+            rectCode = 8  # 使用8号方块作为失败方块
         painter.drawImage(
             QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
                   ACT_SIZE), QImage(ACT),
@@ -95,7 +98,7 @@ class LayerClass():
     # 画值槽进度条
     # x,y 为框内要调整的像素
     # num ,showString为要显示的数字长度和要显示的字符
-    def drawProcess(self, painter, num, x, y,showString):
+    def drawProcess(self, painter, num, x, y, showString):
         levelupW = QImage(CONST.ProcessImg).width()
         levelupH = QImage(CONST.ProcessImg).height()
         painter.setBrush(Qt.black)
@@ -106,17 +109,17 @@ class LayerClass():
         painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
         w = (num % 20) / 20 * levelupW
         painter.drawImage(
-            QRect(self.x + x + 4, self.y + y + 6, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH-4),
+            QRect(self.x + x + 4, self.y + y + 6, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 4),
             QImage(CONST.ProcessImg),
             QRect(w, 0, 1, levelupH))
         painter.setPen(Qt.white)
-        painter.drawText(self.x + x + 4, self.y + y + levelupH-4, showString)
+        painter.drawText(self.x + x + 4, self.y + y + levelupH - 4, showString)
 
 
 class GameLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         OVERWIDTH = QImage(CONST.OverImg).width()
@@ -126,32 +129,28 @@ class GameLayer(LayerClass):
         if self.gameDto.isStarted == 1 and self.gameDto.isLosed == 0:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
-        elif self.gameDto.isLosed == 1:
-            for point in self.gameDto.gameAct.actPoints:
-                self.drawRect(point[0], point[1], painter, 8)  # 使用8号方块作为失败方块
+
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    if self.gameDto.isLosed == 0:
-                        self.drawRect(mapX, mapY, painter, 1)  # 使用1号方块作为固定方块
-                    elif self.gameDto.isLosed == 1:
-                        self.drawRect(mapX, mapY, painter, 8)  # 使用8号方块作为失败方块
-                        painter.drawImage(QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING,
-                                                 self.y + (self.h - OVERHEIGHT) / 2 + PADDING), QImage(CONST.OverImg))
-
+                    self.drawRect(mapX, mapY, painter, self.gameDto.nowLevel % 8)  # 使用余数号方块作为固定方块
+        if self.gameDto.isLosed:
+            painter.drawImage(
+                QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING, self.y + (self.h - OVERHEIGHT) / 2 + PADDING),
+                QImage(CONST.OverImg))
 
 
 class DBLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.DBImg))
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height()+20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 20, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 60, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 100, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 140, 'NO DATA')
@@ -159,33 +158,32 @@ class DBLayer(LayerClass):
 
 
 class WorldLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
-
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.WorldImg))
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height()+20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 20, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 60, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 100, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 140, 'NO DATA')
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 180, 'NO DATA')
 
 
-
 class ButtonLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
         self.btn1 = QPushButton(self.parent)
         self.btn2 = QPushButton(self.parent)
         self.btn1.setObjectName('btn1')
         self.btn2.setObjectName('btn2')
-        self.btn1.setGeometry(self.x + PADDING + 20, self.y + PADDING + 20,QPixmap(CONST.StartImg).width(),QPixmap(CONST.StartImg).height())
+        self.btn1.setGeometry(self.x + PADDING + 20, self.y + PADDING + 20, QPixmap(CONST.StartImg).width(),
+                              QPixmap(CONST.StartImg).height())
         self.btn2.setGeometry(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20,
-                                    QPixmap(CONST.StartImg).width(), QPixmap(CONST.StartImg).height())
+                              QPixmap(CONST.StartImg).width(), QPixmap(CONST.StartImg).height())
         style = '''
                             #btn1{
                                 border-radius: 30px;
@@ -203,18 +201,15 @@ class ButtonLayer(LayerClass):
         self.btn1.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn2.setCursor(QCursor(Qt.PointingHandCursor))
 
-
-
     def paint(self, painter):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
 
 
-
 class NextLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -231,9 +226,9 @@ class NextLayer(LayerClass):
 
 
 class LevelLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -245,9 +240,9 @@ class LevelLayer(LayerClass):
 
 
 class PointLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -255,15 +250,13 @@ class PointLayer(LayerClass):
         painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), QImage(CONST.RmlineImg))
         self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
         self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE,'下一级')
-
-
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
 
 
 class AboutLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -271,9 +264,9 @@ class AboutLayer(LayerClass):
 
 
 class BackLayer(LayerClass):
-    def __init__(self, x, y, w, h,parent=None):
+    def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h,parent)
+        super().__init__(x, y, w, h, parent)
         self.BackImg = "Graphics/Backgroud/00" + str(random.randint(1, 9)) + ".jpg"
 
     def paint(self, painter):

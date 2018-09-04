@@ -8,12 +8,11 @@ from PyQt5.QtCore import QTimer
 
 
 class GameControl():
-    def __init__(self,gameWindow,gameService):
-        #游戏界面层
-        self.gameWindow= gameWindow
-        #游戏逻辑层
-        self.gameService=gameService
-
+    def __init__(self, gameWindow, gameService):
+        # 游戏界面层
+        self.gameWindow = gameWindow
+        # 游戏逻辑层
+        self.gameService = gameService
 
     def keyUp(self):
         self.gameService.keyUp()
@@ -38,7 +37,7 @@ class GameControl():
         # while iscanFastfall:
         #     iscanFastfall=self.gameService.keyDown()
         ##循环代码优化
-        while(1):
+        while (1):
             if not self.gameService.keyDown():
                 break
         self.gameWindow.update()
@@ -59,7 +58,6 @@ class GameControl():
             self.timer.timeout.disconnect(self.keyDown)
             self.timer.stop()
 
-
     def keyPause(self):
         if not self.gameWindow.gameDto.isStarted:
             return
@@ -74,11 +72,10 @@ class GameControl():
             self.timer.start()
         else:
             self.timer.stop()
-        self.gameWindow.gameDto.isPaused= not self.gameWindow.gameDto.isPaused
+        self.gameWindow.gameDto.isPaused = not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
-        self.gameWindow.gameDto.nowRemoveLine+=1
-        self.gameWindow.gameDto.nowPoint+=10
-        self.gameWindow.gameDto.nowLevel = int(self.gameWindow.gameDto.nowPoint/200)
+        self.gameWindow.gameDto.nowRemoveLine += 1
+        self.gameWindow.gameDto.nowPoint += 10
+        self.gameWindow.gameDto.nowLevel = int(self.gameWindow.gameDto.nowPoint / 200)
         self.gameWindow.update()
-
