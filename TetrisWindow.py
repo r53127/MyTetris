@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor, QIcon
 from PyQt5.QtMultimedia import QSound
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 
 import LayerClass
 from Const import CONST
@@ -18,14 +18,15 @@ class TetrisWindow(QMainWindow):
         #接收传入的游戏数据
         self.gameDto = gameDto
         self.initLayer()
-        self.initUI()
         self.initComponent()
+        self.initUI()
+
 
     def initLayer(self):
         self.layers = []
         for layercfg in CONST.CFG.layerscfg:  # load layers size ,make layers object
             creator = getattr(LayerClass, layercfg.classname)  # python reflect mechanism
-            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h)#生成layer
+            layer = creator(layercfg.x, layercfg.y, layercfg.w, layercfg.h,self)#生成layer
             layer.setGameDto(self.gameDto)  # 把游戏数据对象传递给layer
             self.layers.append(layer)  # create and init layers
 
@@ -39,6 +40,7 @@ class TetrisWindow(QMainWindow):
         self.pix = QBitmap("Graphics/Backgroud/mask3.png")
         self.resize(self.pix.size())  # Masking panel pic size：1162*654
         self.setMask(self.pix)
+        # self.resize(1162,654)
         self.setWindowOpacity(1)  # set transparency
         self.show()
 
@@ -60,6 +62,7 @@ class TetrisWindow(QMainWindow):
             if event.key() == Qt.Key_Escape:
                 self.close()
             elif event.key() == Qt.Key_Up:
+                print('up')
                 self.gameControl.keyUp()
             elif event.key() == Qt.Key_Down:
                 self.gameControl.keyDown()
@@ -94,6 +97,7 @@ class TetrisWindow(QMainWindow):
             painter = QPainter(self)
             for layer in self.layers:
                 layer.paint(painter)  # 显示layer
+
         except BaseException as e:
             print('Error is :', e)
 

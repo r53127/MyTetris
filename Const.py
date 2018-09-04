@@ -17,6 +17,7 @@ class CONST():
     NumImge = "Graphics/game/number.png"
     SetupImg = "Graphics/game/setup.png"
     ProcessImg="Graphics/game/process.png"
+    PauseImg="Graphics/game/pause.png"
     Act_Size = 32  # 方块像素
 
     NoShape = 0

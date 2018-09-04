@@ -4,7 +4,8 @@
 import random
 
 from PyQt5.QtCore import QRect, QPoint, Qt
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage, QPixmap, QCursor
+from PyQt5.QtWidgets import QPushButton
 
 from Const import CONST
 
@@ -20,11 +21,12 @@ NUMHEIGHT = QImage(CONST.NumImge).height()  # 数字高度
 
 
 class LayerClass():
-    def __init__(self, x, y, w, h):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
+    def __init__(self, x, y, w, h,parent=None):  # Top-left coordinate and size of the layer is （x,y)  and （width,height)
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.parent=parent
         self.imgW = QImage(FRMAEIMG).width()
         self.imgH = QImage(FRMAEIMG).height()
 
@@ -112,9 +114,9 @@ class LayerClass():
 
 
 class GameLayer(LayerClass):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h,parent=None):
         # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h)
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         OVERWIDTH = QImage(CONST.OverImg).width()
@@ -140,9 +142,11 @@ class GameLayer(LayerClass):
                                                  self.y + (self.h - OVERHEIGHT) / 2 + PADDING), QImage(CONST.OverImg))
 
 
+
 class DBLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -155,8 +159,10 @@ class DBLayer(LayerClass):
 
 
 class WorldLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
+
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -168,20 +174,47 @@ class WorldLayer(LayerClass):
         self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 180, 'NO DATA')
 
 
+
 class ButtonLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
+        self.btn1 = QPushButton(self.parent)
+        self.btn2 = QPushButton(self.parent)
+        self.btn1.setObjectName('btn1')
+        self.btn2.setObjectName('btn2')
+        self.btn1.setGeometry(self.x + PADDING + 20, self.y + PADDING + 20,QPixmap(CONST.StartImg).width(),QPixmap(CONST.StartImg).height())
+        self.btn2.setGeometry(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20,
+                                    QPixmap(CONST.StartImg).width(), QPixmap(CONST.StartImg).height())
+        style = '''
+                            #btn1{
+                                border-radius: 30px;
+                                background-image: url('./Graphics/game/start.png');
+                                }
+                            #btn2{
+                                border-radius: 30px;
+                                background-image: url('./Graphics/game/setup.png');
+                                }
+                        '''
+        self.btn1.setStyleSheet(style)
+        self.btn2.setStyleSheet(style)
+        self.btn1.setFocusPolicy(0)
+        self.btn2.setFocusPolicy(0)
+        self.btn1.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn2.setCursor(QCursor(Qt.PointingHandCursor))
+
+
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING + 20, self.y + PADDING + 20), QImage(CONST.StartImg))
-        painter.drawImage(QPoint(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20),
-                          QImage(CONST.SetupImg))
+        self.btn1.pressed.connect(self.parent.gameControl.keyStart)
+
 
 
 class NextLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -198,8 +231,9 @@ class NextLayer(LayerClass):
 
 
 class LevelLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -211,8 +245,9 @@ class LevelLayer(LayerClass):
 
 
 class PointLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -226,8 +261,9 @@ class PointLayer(LayerClass):
 
 
 class AboutLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
 
     def paint(self, painter):
         self.createlayer(painter)
@@ -235,8 +271,9 @@ class AboutLayer(LayerClass):
 
 
 class BackLayer(LayerClass):
-    def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h)
+    def __init__(self, x, y, w, h,parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h,parent)
         self.BackImg = "Graphics/Backgroud/00" + str(random.randint(1, 9)) + ".jpg"
 
     def paint(self, painter):
