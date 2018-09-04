@@ -8,8 +8,8 @@
 	<layer class="ButtonLayer" x="788" y="32" w="334" h="124" />
 	<layer class="NextLayer" x="788" y="188" w="176" h="148" />
 	<layer class="LevelLayer" x="964" y="188" w="158" h="148" />
-	<layer class="PointLayer" x="788" y="368" w="334" h="124" />
-	<layer class="AboutLayer" x="788" y="524" w="334" h="98" />
+	<layer class="PointLayer" x="788" y="368" w="334" h="134" />
+	<layer class="AboutLayer" x="788" y="534" w="334" h="88" />
   </frame>
   <system>
   </system>

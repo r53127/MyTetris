@@ -3,19 +3,20 @@
 '''
 import random
 
-from PyQt5.QtCore import QRect, QPoint
+from PyQt5.QtCore import QRect, QPoint, Qt
 from PyQt5.QtGui import QImage, QPixmap
 
 from Const import CONST
 
+SCORE_IMG_HEIGHT = QImage(CONST.ScoreImg).height()
 FRMAEIMG = CONST.FrameImg  # 边框图片
 SIZE = CONST.CFG.cornersize  # pic cornor width : 7 pixel
 PADDING = CONST.CFG.padding  # pic padding : 16 pixel
 ACT = CONST.ActImg  # 方块图片
 ACT_SIZE = CONST.Act_Size  # 方块边长32像素
 
-NUMWIDTH=QImage(CONST.NumImge).width()/10#数字宽度
-NUMHEIGHT=QImage(CONST.NumImge).height()#数字高度
+NUMWIDTH = QImage(CONST.NumImge).width() / 10  # 数字宽度
+NUMHEIGHT = QImage(CONST.NumImge).height()  # 数字高度
 
 
 class LayerClass():
@@ -67,8 +68,8 @@ class LayerClass():
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
     # 画方块
-    #mapX,mapY为地图格数
-    #rectCode为单个方块在方块图片中的编号
+    # mapX,mapY为地图格数
+    # rectCode为单个方块在方块图片中的编号
     def drawRect(self, mapX, mapY, painter, rectCode):
         painter.drawImage(
             QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
@@ -78,14 +79,37 @@ class LayerClass():
         # 打印图片数字
         # x,y 为框内坐标
         # num 为要打印的数字
-        #numberSize为原字体比例
-    def drawNumberAlignRight(self, num, x, y, painter,numberSize=1):
+        # numberSize为原字体比例
+
+    def drawNumberAlignRight(self, num, x, y, painter, numberSize=1):
         finished = 0  # 已打印字符数
-        for i in reversed(list(str(num))):#逆序打印
+        for i in reversed(list(str(num))):  # 逆序打印
             finished = finished + 1
-            painter.drawImage(QRect(self.x + x - finished * NUMWIDTH, self.y + y, NUMWIDTH*numberSize,NUMHEIGHT*numberSize),
-                              QImage(CONST.NumImge),
-                              QRect(int(i) * NUMWIDTH, 0, NUMWIDTH, NUMHEIGHT))
+            painter.drawImage(
+                QRect(self.x + x - finished * NUMWIDTH, self.y + y, NUMWIDTH * numberSize, NUMHEIGHT * numberSize),
+                QImage(CONST.NumImge),
+                QRect(int(i) * NUMWIDTH, 0, NUMWIDTH, NUMHEIGHT))
+
+    # 画值槽进度条
+    # x,y 为框内要调整的像素
+    # num ,showString为要显示的数字长度和要显示的字符
+    def drawProcess(self, painter, num, x, y,showString):
+        levelupW = QImage(CONST.ProcessImg).width()
+        levelupH = QImage(CONST.ProcessImg).height()
+        painter.setBrush(Qt.black)
+        painter.drawRect(self.x + x, self.y + y + 2, self.w - 2 * PADDING, levelupH + 4)
+        painter.setBrush(Qt.white)
+        painter.drawRect(self.x + x + 2, self.y + y + 4, self.w - 2 * PADDING - 4, levelupH)
+        painter.setBrush(Qt.black)
+        painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
+        w = (num % 20) / 20 * levelupW
+        painter.drawImage(
+            QRect(self.x + x + 4, self.y + y + 6, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH-4),
+            QImage(CONST.ProcessImg),
+            QRect(w, 0, 1, levelupH))
+        painter.setPen(Qt.white)
+        painter.drawText(self.x + x + 4, self.y + y + levelupH-4, showString)
+
 
 class GameLayer(LayerClass):
     def __init__(self, x, y, w, h):
@@ -97,22 +121,23 @@ class GameLayer(LayerClass):
         OVERHEIGHT = QImage(CONST.OverImg).height()
         self.createlayer(painter)
         # 打印下落方块
-        if self.gameDto.isStarted==1 and self.gameDto.isLosed==0:
+        if self.gameDto.isStarted == 1 and self.gameDto.isLosed == 0:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
-        elif self.gameDto.isLosed==1:
+        elif self.gameDto.isLosed == 1:
             for point in self.gameDto.gameAct.actPoints:
-                self.drawRect(point[0], point[1], painter, 8)# 使用8号方块作为失败方块
+                self.drawRect(point[0], point[1], painter, 8)  # 使用8号方块作为失败方块
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    if self.gameDto.isLosed==0:
+                    if self.gameDto.isLosed == 0:
                         self.drawRect(mapX, mapY, painter, 1)  # 使用1号方块作为固定方块
-                    elif self.gameDto.isLosed==1:
+                    elif self.gameDto.isLosed == 1:
                         self.drawRect(mapX, mapY, painter, 8)  # 使用8号方块作为失败方块
-                        painter.drawImage(QPoint(self.x + (self.w-OVERWIDTH)/2+PADDING, self.y+(self.h-OVERHEIGHT)/2 + PADDING), QImage(CONST.OverImg))
+                        painter.drawImage(QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING,
+                                                 self.y + (self.h - OVERHEIGHT) / 2 + PADDING), QImage(CONST.OverImg))
 
 
 class DBLayer(LayerClass):
@@ -140,7 +165,8 @@ class ButtonLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING + 20, self.y + PADDING + 20), QImage(CONST.StartImg))
-        painter.drawImage(QPoint(self.x + PADDING + 60+QImage(CONST.StartImg).width(), self.y + PADDING + 20), QImage(CONST.SetupImg))
+        painter.drawImage(QPoint(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20),
+                          QImage(CONST.SetupImg))
 
 
 class NextLayer(LayerClass):
@@ -150,7 +176,7 @@ class NextLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         # 打印下一个方块
-        if self.gameDto.isStarted==1 and self.gameDto.isLosed==0:
+        if self.gameDto.isStarted == 1 and self.gameDto.isLosed == 0:
             nextPoints = []
             for point in CONST.rectTable[self.gameDto.next]:
                 nextPoints.append([point[0], point[1]])
@@ -169,10 +195,9 @@ class LevelLayer(LayerClass):
         self.createlayer(painter)
         levelImgWidth = QImage(CONST.LevelImg).width()
         levelImgHeight = QImage(CONST.LevelImg).height()
-        centerx=(self.w-levelImgWidth)/2
+        centerx = (self.w - levelImgWidth) / 2
         painter.drawImage(QPoint(self.x + centerx, self.y + PADDING), QImage(CONST.LevelImg))
-        self.drawNumberAlignRight(self.gameDto.nowLevel,self.w*3/4,(self.h-levelImgHeight)/2,painter)
-
+        self.drawNumberAlignRight(self.gameDto.nowLevel, self.w * 3 / 4, (self.h - levelImgHeight) / 2, painter)
 
 
 class PointLayer(LayerClass):
@@ -181,11 +206,13 @@ class PointLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        scoreImgHeight = QImage(CONST.ScoreImg).height()
-        painter.drawImage(QPoint(self.x+SIZE , self.y+SIZE), QImage(CONST.ScoreImg))
-        painter.drawImage(QPoint(self.x+SIZE, self.y+scoreImgHeight+SIZE), QImage(CONST.RmlineImg))
-        self.drawNumberAlignRight(self.gameDto.nowPoint,self.w,0,painter,0.7)
-        self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, scoreImgHeight, painter, 0.7)
+        painter.drawImage(QPoint(self.x + SIZE, self.y + SIZE), QImage(CONST.ScoreImg))
+        painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), QImage(CONST.RmlineImg))
+        self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
+        self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE,'下一级')
+
+
 
 
 class AboutLayer(LayerClass):
@@ -196,10 +223,11 @@ class AboutLayer(LayerClass):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING + 10, self.y + PADDING), QImage(CONST.LogoImg))
 
+
 class BackLayer(LayerClass):
     def __init__(self, x, y, w, h):
         super().__init__(x, y, w, h)
-        self.BackImg="Graphics/Backgroud/00"+str(random.randint(1,9))+".jpg"
+        self.BackImg = "Graphics/Backgroud/00" + str(random.randint(1, 9)) + ".jpg"
 
     def paint(self, painter):
         painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.BackImg))

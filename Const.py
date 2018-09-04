@@ -16,6 +16,7 @@ class CONST():
     OverImg = "Graphics/game/over.png"
     NumImge = "Graphics/game/number.png"
     SetupImg = "Graphics/game/setup.png"
+    ProcessImg="Graphics/game/process.png"
     Act_Size = 32  # 方块像素
 
     NoShape = 0
