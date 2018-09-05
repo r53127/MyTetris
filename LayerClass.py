@@ -111,7 +111,7 @@ class LayerClass():
             CONST.ProcessImg,
             QRect(w, 0, 1, levelupH))
         painter.setPen(Qt.white)
-        painter.setFont(QFont('Mine', 10,QFont.Bold))
+        painter.setFont(QFont('Mine', 10, QFont.Bold))
         painter.drawText(self.x + x + 4, self.y + y + levelupH - 4, showString)
 
 
@@ -125,7 +125,7 @@ class GameLayer(LayerClass):
         OVERHEIGHT = CONST.OverImg.height()
         self.createlayer(painter)
         # 打印下落方块
-        if self.gameDto.isStarted  and not self.gameDto.isLosed:
+        if self.gameDto.isStarted and not self.gameDto.isLosed:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
 
@@ -149,11 +149,10 @@ class DBLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 20, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 60, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 100, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 140, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 180, 'NO DATA')
+        i = 1
+        while i <=5:
+            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height()  + 40 * i, 'NO DATA')
+            i = i + 1
 
 
 class WorldLayer(LayerClass):
@@ -269,5 +268,5 @@ class BackLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
-        self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel%9) + ".jpg")
+        self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel % 9) + ".jpg")
         painter.drawPixmap(self.x, self.y, self.w, self.h, self.BackImg)
