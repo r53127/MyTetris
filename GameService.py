@@ -71,12 +71,6 @@ class GameService():
             if self.dto.gameMap[point[0]][point[1]]:
                 return True
 
-    def plusExp(self):
-        pass
-
-    def upgradeLevel(self):
-        pass
-
     def plusPoint(self):
         removedLines = 0
         for mapY in range(self.dto.gameHeight):  # 逐行扫描方块地图

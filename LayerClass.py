@@ -80,11 +80,10 @@ class LayerClass():
                   ACT_SIZE), ACT,
             QRect(rectCode * 32, 0, ACT_SIZE, ACT_SIZE))
 
-        # 打印图片数字
-        # x,y 为框内坐标
-        # num 为要打印的数字
-        # numberSize为原字体比例
-
+    # 打印图片数字
+    # x,y 为框内坐标
+    # num 为要打印的数字
+    # numberSize为原字体比例
     def drawNumberAlignRight(self, num, x, y, painter, numberSize=1):
         finished = 0  # 已打印字符数
         for i in reversed(list(str(num))):  # 逆序打印
@@ -270,5 +269,5 @@ class BackLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
-        self.BackImg = "Graphics/Backgroud/00" + str(self.gameDto.nowLevel%9) + ".jpg"
-        painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.BackImg))
+        self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel%9) + ".jpg")
+        painter.drawPixmap(self.x, self.y, self.w, self.h, self.BackImg)
