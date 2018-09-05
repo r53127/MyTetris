@@ -4,12 +4,11 @@
 import random
 
 from PyQt5.QtCore import QRect, QPoint, Qt
-from PyQt5.QtGui import QImage, QPixmap, QCursor
+from PyQt5.QtGui import QImage, QPixmap, QCursor, QFont
 from PyQt5.QtWidgets import QPushButton
 
 from Const import CONST
 
-SCORE_IMG_HEIGHT = QImage(CONST.ScoreImg).height()
 FRMAEIMG = CONST.FrameImg  # 边框图片
 SIZE = CONST.CFG.cornersize  # pic cornor width : 7 pixel
 PADDING = CONST.CFG.padding  # pic padding : 16 pixel
@@ -113,6 +112,7 @@ class LayerClass():
             QImage(CONST.ProcessImg),
             QRect(w, 0, 1, levelupH))
         painter.setPen(Qt.white)
+        painter.setFont(QFont('Mine', 10,QFont.Bold))
         painter.drawText(self.x + x + 4, self.y + y + levelupH - 4, showString)
 
 
@@ -126,7 +126,7 @@ class GameLayer(LayerClass):
         OVERHEIGHT = QImage(CONST.OverImg).height()
         self.createlayer(painter)
         # 打印下落方块
-        if self.gameDto.isStarted == 1 and self.gameDto.isLosed == 0:
+        if self.gameDto.isStarted  and not self.gameDto.isLosed:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
 
@@ -178,18 +178,18 @@ class ButtonLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
         self.btn1 = QPushButton(self.parent)
         self.btn2 = QPushButton(self.parent)
-        self.btn1.setObjectName('btn1')
-        self.btn2.setObjectName('btn2')
+        self.btn1.setObjectName('startbtn')
+        self.btn2.setObjectName('setupbtn')
         self.btn1.setGeometry(self.x + PADDING + 20, self.y + PADDING + 20, QPixmap(CONST.StartImg).width(),
                               QPixmap(CONST.StartImg).height())
         self.btn2.setGeometry(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20,
                               QPixmap(CONST.StartImg).width(), QPixmap(CONST.StartImg).height())
         style = '''
-                            #btn1{
+                            #startbtn{
                                 border-radius: 30px;
                                 background-image: url('./Graphics/game/start.png');
                                 }
-                            #btn2{
+                            #setupbtn{
                                 border-radius: 30px;
                                 background-image: url('./Graphics/game/setup.png');
                                 }
@@ -245,6 +245,7 @@ class PointLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
+        SCORE_IMG_HEIGHT = QImage(CONST.ScoreImg).height()
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + SIZE, self.y + SIZE), QImage(CONST.ScoreImg))
         painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), QImage(CONST.RmlineImg))

@@ -43,6 +43,7 @@ class TetrisWindow(QMainWindow):
         self.setWindowOpacity(1)  # set transparency
         self.show()
 
+
     def initComponent(self):
         pass
 
