@@ -125,7 +125,7 @@ class GameLayer(LayerClass):
         OVERHEIGHT = CONST.OverImg.height()
         self.createlayer(painter)
         # 打印下落方块
-        if self.gameDto.isStarted and not self.gameDto.isLosed:
+        if self.gameDto.isStarted:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
 
@@ -211,7 +211,7 @@ class NextLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         # 打印下一个方块
-        if self.gameDto.isStarted == 1 and self.gameDto.isLosed == 0:
+        if self.gameDto.isStarted and not self.gameDto.isLosed:
             nextPoints = []
             for point in CONST.rectTable[self.gameDto.next]:
                 nextPoints.append([point[0], point[1]])
