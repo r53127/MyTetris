@@ -107,12 +107,12 @@ class LayerClass():
         painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
         w = (num % 20) / 20 * levelupW
         painter.drawImage(
-            QRect(self.x + x + 4, self.y + y + 6, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 4),
+            QRect(self.x + x + 4, self.y + y + 7, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 5),
             CONST.ProcessImg,
             QRect(w, 0, 1, levelupH))
         painter.setPen(Qt.white)
         painter.setFont(QFont('Mine', 10, QFont.Bold))
-        painter.drawText(self.x + x + 4, self.y + y + levelupH - 4, showString)
+        painter.drawText(self.x + x + 6, self.y + y + levelupH - 4, showString)
 
 
 class GameLayer(LayerClass):
@@ -149,9 +149,9 @@ class DBLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
-        i = 1
-        while i <=5:
-            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height()  + 40 * i, 'NO DATA')
+        i = 0
+        while i < 5:
+            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 20 + 40 * i, 'NO DATA')
             i = i + 1
 
 
@@ -163,11 +163,10 @@ class WorldLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 20, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 60, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 100, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 140, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 180, 'NO DATA')
+        i = 0
+        while i < 5:
+            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 20 + i * 40, 'NO DATA')
+            i = i + 1
 
 
 class ButtonLayer(LayerClass):
