@@ -1,23 +1,25 @@
+from PyQt5.QtGui import QImage
+
 from GameCfg import GameCfg
 
 
 class CONST():
     CFG = GameCfg()  # load config file
-    FrameImg = "Graphics/windows/windows.png"
-    LogoImg = "Graphics/game/logo.png"
-    DBImg = "Graphics/game/db.png"
-    WorldImg = "Graphics/game/world.png"
-    StartImg = "Graphics/game/start.png"
-    LevelImg = "Graphics/game/level.png"
-    ScoreImg = "Graphics/game/score.png"
-    RmlineImg = "Graphics/game/rmline.png"
-    ActImg = "Graphics/game/rect.png"
-    BackImg = "Graphics/Backgroud/screen1.jpg"
-    OverImg = "Graphics/game/over.png"
-    NumImge = "Graphics/game/number.png"
-    SetupImg = "Graphics/game/setup.png"
-    ProcessImg="Graphics/game/process.png"
-    PauseImg="Graphics/game/pause.png"
+    FrameImg = QImage("Graphics/windows/windows.png")
+    LogoImg = QImage("Graphics/game/logo.png")
+    DBImg = QImage("Graphics/game/db.png")
+    WorldImg = QImage("Graphics/game/world.png")
+    StartImg = QImage("Graphics/game/start.png")
+    LevelImg = QImage("Graphics/game/level.png")
+    ScoreImg = QImage("Graphics/game/score.png")
+    RmlineImg = QImage("Graphics/game/rmline.png")
+    ActImg = QImage("Graphics/game/rect.png")
+    BackImg = QImage("Graphics/Backgroud/screen1.jpg")
+    OverImg = QImage("Graphics/game/over.png")
+    NumImge = QImage("Graphics/game/number.png")
+    SetupImg = QImage("Graphics/game/setup.png")
+    ProcessImg=QImage("Graphics/game/process.png")
+    PauseImg=QImage("Graphics/game/pause.png")
     Act_Size = 32  # 方块像素
 
     NoShape = 0

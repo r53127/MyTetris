@@ -62,7 +62,6 @@ class TetrisWindow(QMainWindow):
             if event.key() == Qt.Key_Escape:
                 self.close()
             elif event.key() == Qt.Key_Up:
-                print('up')
                 self.gameControl.keyUp()
             elif event.key() == Qt.Key_Down:
                 self.gameControl.keyDown()
@@ -96,7 +95,6 @@ class TetrisWindow(QMainWindow):
             painter = QPainter(self)
             for layer in self.layers:
                 layer.paint(painter)  # 显示layer
-
         except BaseException as e:
             print('Error is :', e)
 

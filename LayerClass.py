@@ -15,8 +15,8 @@ PADDING = CONST.CFG.padding  # pic padding : 16 pixel
 ACT = CONST.ActImg  # 方块图片
 ACT_SIZE = CONST.Act_Size  # 方块边长32像素
 
-NUMWIDTH = QImage(CONST.NumImge).width() / 10  # 数字宽度
-NUMHEIGHT = QImage(CONST.NumImge).height()  # 数字高度
+NUMWIDTH = CONST.NumImge.width() / 10  # 数字宽度
+NUMHEIGHT = CONST.NumImge.height()  # 数字高度
 
 
 class LayerClass():
@@ -27,46 +27,46 @@ class LayerClass():
         self.w = w
         self.h = h
         self.parent = parent
-        self.imgW = QImage(FRMAEIMG).width()
-        self.imgH = QImage(FRMAEIMG).height()
+        self.imgW = FRMAEIMG.width()
+        self.imgH = FRMAEIMG.height()
 
     def setGameDto(self, gameDto):
         self.gameDto = gameDto
 
     def createlayer(self, painter):
         # 左上
-        painter.drawImage(QRect(self.x, self.y, SIZE, SIZE), QImage(FRMAEIMG),
+        painter.drawImage(QRect(self.x, self.y, SIZE, SIZE), FRMAEIMG,
                           QRect(0, 0, SIZE, SIZE))
         # 中上
         painter.drawImage(QRect(self.x + SIZE, self.y, self.w - 2 * SIZE, SIZE),
-                          QImage(FRMAEIMG),
+                          FRMAEIMG,
                           QRect(SIZE, 0, self.imgW - 2 * SIZE, SIZE))
         # 右上
-        painter.drawImage(QRect(self.x + self.w - SIZE, self.y, SIZE, SIZE), QImage(FRMAEIMG),
+        painter.drawImage(QRect(self.x + self.w - SIZE, self.y, SIZE, SIZE), FRMAEIMG,
                           QRect(self.imgW - SIZE, 0, SIZE, SIZE))
         # 左中
         painter.drawImage(QRect(self.x, self.y + SIZE, SIZE, self.h - 2 * SIZE),
-                          QImage(FRMAEIMG),
+                          FRMAEIMG,
                           QRect(0, SIZE, SIZE, self.imgH - 2 * SIZE))
         # 中中
         painter.drawImage(
             QRect(self.x + SIZE, self.y + SIZE, self.w - 2 * SIZE, self.h - 2 * SIZE),
-            QImage(FRMAEIMG),
+            FRMAEIMG,
             QRect(SIZE, SIZE, self.imgW - 2 * SIZE, self.imgH - 2 * SIZE))
         # 右中
         painter.drawImage(QRect(self.x + self.w - SIZE, self.y + SIZE, SIZE, self.h - 2 * SIZE),
-                          QImage(FRMAEIMG),
+                          FRMAEIMG,
                           QRect(self.imgW - SIZE, SIZE, SIZE, self.imgH - 2 * SIZE))
         # 左下
-        painter.drawImage(QRect(self.x, self.y + self.h - SIZE, SIZE, SIZE), QImage(FRMAEIMG),
+        painter.drawImage(QRect(self.x, self.y + self.h - SIZE, SIZE, SIZE), FRMAEIMG,
                           QRect(0, self.imgH - SIZE, SIZE, SIZE))
         # 中下
         painter.drawImage(QRect(self.x + SIZE, self.y + self.h - SIZE, self.w - 2 * SIZE, SIZE),
-                          QImage(FRMAEIMG),
+                          FRMAEIMG,
                           QRect(SIZE, self.imgH - SIZE, self.imgW - 2 * SIZE, SIZE))
         # 右下
         painter.drawImage(QRect(self.x + self.w - SIZE, self.y + self.h - SIZE, SIZE, SIZE),
-                          QImage(FRMAEIMG),
+                          FRMAEIMG,
                           QRect(self.imgW - SIZE, self.imgH - SIZE, SIZE, SIZE))
 
     # 画方块
@@ -77,7 +77,7 @@ class LayerClass():
             rectCode = 8  # 使用8号方块作为失败方块
         painter.drawImage(
             QRect(self.x + mapX * ACT_SIZE + SIZE, self.y + mapY * ACT_SIZE + SIZE, ACT_SIZE,
-                  ACT_SIZE), QImage(ACT),
+                  ACT_SIZE), ACT,
             QRect(rectCode * 32, 0, ACT_SIZE, ACT_SIZE))
 
         # 打印图片数字
@@ -91,15 +91,15 @@ class LayerClass():
             finished = finished + 1
             painter.drawImage(
                 QRect(self.x + x - finished * NUMWIDTH, self.y + y, NUMWIDTH * numberSize, NUMHEIGHT * numberSize),
-                QImage(CONST.NumImge),
+                CONST.NumImge,
                 QRect(int(i) * NUMWIDTH, 0, NUMWIDTH, NUMHEIGHT))
 
     # 画值槽进度条
     # x,y 为框内要调整的像素
     # num ,showString为要显示的数字长度和要显示的字符
     def drawProcess(self, painter, num, x, y, showString):
-        levelupW = QImage(CONST.ProcessImg).width()
-        levelupH = QImage(CONST.ProcessImg).height()
+        levelupW = CONST.ProcessImg.width()
+        levelupH = CONST.ProcessImg.height()
         painter.setBrush(Qt.black)
         painter.drawRect(self.x + x, self.y + y + 2, self.w - 2 * PADDING, levelupH + 4)
         painter.setBrush(Qt.white)
@@ -109,7 +109,7 @@ class LayerClass():
         w = (num % 20) / 20 * levelupW
         painter.drawImage(
             QRect(self.x + x + 4, self.y + y + 6, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 4),
-            QImage(CONST.ProcessImg),
+            CONST.ProcessImg,
             QRect(w, 0, 1, levelupH))
         painter.setPen(Qt.white)
         painter.setFont(QFont('Mine', 10,QFont.Bold))
@@ -122,8 +122,8 @@ class GameLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
-        OVERWIDTH = QImage(CONST.OverImg).width()
-        OVERHEIGHT = QImage(CONST.OverImg).height()
+        OVERWIDTH = CONST.OverImg.width()
+        OVERHEIGHT = CONST.OverImg.height()
         self.createlayer(painter)
         # 打印下落方块
         if self.gameDto.isStarted  and not self.gameDto.isLosed:
@@ -139,7 +139,7 @@ class GameLayer(LayerClass):
         if self.gameDto.isLosed:
             painter.drawImage(
                 QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING, self.y + (self.h - OVERHEIGHT) / 2 + PADDING),
-                QImage(CONST.OverImg))
+                CONST.OverImg)
 
 
 class DBLayer(LayerClass):
@@ -149,12 +149,12 @@ class DBLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.DBImg))
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 20, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 60, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 100, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 140, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.DBImg).height() + 180, 'NO DATA')
+        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 60, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 100, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 140, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 180, 'NO DATA')
 
 
 class WorldLayer(LayerClass):
@@ -164,12 +164,12 @@ class WorldLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), QImage(CONST.WorldImg))
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 20, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 60, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 100, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 140, 'NO DATA')
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, QImage(CONST.WorldImg).height() + 180, 'NO DATA')
+        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 20, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 60, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 100, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 140, 'NO DATA')
+        self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 180, 'NO DATA')
 
 
 class ButtonLayer(LayerClass):
@@ -182,7 +182,7 @@ class ButtonLayer(LayerClass):
         self.btn2.setObjectName('setupbtn')
         self.btn1.setGeometry(self.x + PADDING + 20, self.y + PADDING + 20, QPixmap(CONST.StartImg).width(),
                               QPixmap(CONST.StartImg).height())
-        self.btn2.setGeometry(self.x + PADDING + 60 + QImage(CONST.StartImg).width(), self.y + PADDING + 20,
+        self.btn2.setGeometry(self.x + PADDING + 60 + CONST.StartImg.width(), self.y + PADDING + 20,
                               QPixmap(CONST.StartImg).width(), QPixmap(CONST.StartImg).height())
         style = '''
                             #startbtn{
@@ -221,7 +221,7 @@ class NextLayer(LayerClass):
             for point in nextPoints:
                 painter.drawImage(
                     QRect(self.x + point[0] * ACT_SIZE + SIZE + 30, self.y + point[1] * ACT_SIZE + SIZE + 30, ACT_SIZE,
-                          ACT_SIZE), QImage(ACT),
+                          ACT_SIZE), ACT,
                     QRect(self.gameDto.next * 32, 0, ACT_SIZE, ACT_SIZE))
 
 
@@ -232,10 +232,10 @@ class LevelLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        levelImgWidth = QImage(CONST.LevelImg).width()
-        levelImgHeight = QImage(CONST.LevelImg).height()
+        levelImgWidth = CONST.LevelImg.width()
+        levelImgHeight = CONST.LevelImg.height()
         centerx = (self.w - levelImgWidth) / 2
-        painter.drawImage(QPoint(self.x + centerx, self.y + PADDING), QImage(CONST.LevelImg))
+        painter.drawImage(QPoint(self.x + centerx, self.y + PADDING), CONST.LevelImg)
         self.drawNumberAlignRight(self.gameDto.nowLevel, self.w * 3 / 4, (self.h - levelImgHeight) / 2, painter)
 
 
@@ -245,10 +245,10 @@ class PointLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
-        SCORE_IMG_HEIGHT = QImage(CONST.ScoreImg).height()
+        SCORE_IMG_HEIGHT = CONST.ScoreImg.height()
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + SIZE, self.y + SIZE), QImage(CONST.ScoreImg))
-        painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), QImage(CONST.RmlineImg))
+        painter.drawImage(QPoint(self.x + SIZE, self.y + SIZE), CONST.ScoreImg)
+        painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), CONST.RmlineImg)
         self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
         self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
         self.drawProcess(painter, self.gameDto.nowRemoveLine, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
@@ -261,7 +261,7 @@ class AboutLayer(LayerClass):
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING + 10, self.y + PADDING), QImage(CONST.LogoImg))
+        painter.drawImage(QPoint(self.x + PADDING + 10, self.y + PADDING), CONST.LogoImg)
 
 
 class BackLayer(LayerClass):
