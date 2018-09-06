@@ -1,10 +1,9 @@
 '''
 游戏界面图层
 '''
-import random
 
 from PyQt5.QtCore import QRect, QPoint, Qt
-from PyQt5.QtGui import QImage, QPixmap, QCursor, QFont
+from PyQt5.QtGui import QPixmap, QCursor, QFont
 from PyQt5.QtWidgets import QPushButton
 
 from Const import CONST
@@ -105,7 +104,7 @@ class LayerClass():
         painter.drawRect(self.x + x + 2, self.y + y + 4, self.w - 2 * PADDING - 4, levelupH)
         painter.setBrush(Qt.black)
         painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
-        w = (num % 20) / 20 * levelupW
+        w = (num % 200) / 200 * levelupW
         painter.drawImage(
             QRect(self.x + x + 4, self.y + y + 7, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 5),
             CONST.ProcessImg,
@@ -151,7 +150,7 @@ class DBLayer(LayerClass):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         i = 0
         while i < 5:
-            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.DBImg.height() + 20 + 40 * i, 'NO DATA')
+            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, 'NO DATA')
             i = i + 1
 
 
@@ -165,7 +164,7 @@ class WorldLayer(LayerClass):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
         i = 0
         while i < 5:
-            self.drawProcess(painter, self.gameDto.nowRemoveLine, 15, CONST.WorldImg.height() + 20 + i * 40, 'NO DATA')
+            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.WorldImg.height() + 20 + i * 40, 'NO DATA')
             i = i + 1
 
 
@@ -248,7 +247,7 @@ class PointLayer(LayerClass):
         painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), CONST.RmlineImg)
         self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
         self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
-        self.drawProcess(painter, self.gameDto.nowRemoveLine, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
+        self.drawProcess(painter, self.gameDto.nowPoint, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
 
 
 class AboutLayer(LayerClass):

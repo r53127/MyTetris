@@ -47,7 +47,6 @@ class GameControl():
             return
         self.gameService.startGame()
         self.timer = QTimer()
-        print('first',self.timer)
         self.timer.setInterval(self.gameWindow.gameDto.speed)
         self.timer.timeout.connect(self.keyDown)
         self.timer.timeout.connect(self.updateTimer)
@@ -55,9 +54,7 @@ class GameControl():
         self.gameWindow.update()
 
     def updateTimer(self):
-        print(self.gameWindow.gameDto.speed)
         self.timer.setInterval(self.gameWindow.gameDto.speed)
-        print('second',self.timer,self.timer.interval())
         if self.gameWindow.gameDto.isLosed:
             self.timer.timeout.disconnect(self.keyDown)
             self.timer.stop()
@@ -80,6 +77,5 @@ class GameControl():
 
     def keyTest(self):
         self.gameWindow.gameDto.nowRemoveLine += 1
-        self.gameWindow.gameDto.nowPoint += 10
-        self.gameWindow.gameDto.nowLevel = int(self.gameWindow.gameDto.nowPoint / 200)
+        self.gameService.updateSpeed(self.gameService.updateLevel(self.gameService.updatePoint(1)))
         self.gameWindow.update()

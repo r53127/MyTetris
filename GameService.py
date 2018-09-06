@@ -5,6 +5,8 @@ import random
 
 from PyQt5.QtMultimedia import QSound
 
+from Const import CONST
+
 
 class GameService():
     def __init__(self, dto):
@@ -17,6 +19,7 @@ class GameService():
             self.dto.nowRemoveLine = 0
             self.dto.nowPoint = 0
             self.dto.nowLevel = 0
+            self.dto.speed = CONST.GameSpeed
             self.dto.gameMap = [[0] * self.dto.gameHeight for i in range(self.dto.gameWidth)]
             self.dto.gameAct.initRect(random.randint(1, 7))
 
@@ -45,23 +48,14 @@ class GameService():
         ##移不动刷新地图
         for act in self.dto.gameAct.actPoints:
             self.dto.gameMap[act[0]][act[1]] = 1
-        ##消行加分
-        removedLines = self.plusPoint()
-        if removedLines:
-            ##算分
-            self.dto.nowRemoveLine += removedLines
-            self.dto.nowPoint += removedLines ** 2 * 10
-            ##升级并刷新定时器间隔
-        newlevel = int(self.dto.nowPoint / 200)
-        print(self.dto.nowLevel,newlevel)
-        if newlevel>self.dto.nowLevel:
-            if self.dto.speed <= 50:
-                self.dto.speed = 50
-            else:
-                self.dto.speed = self.dto.speed - self.dto.nowLevel * 50
-            self.dto.nowLevel=newlevel
-
-
+        ##消行
+        removed_Lines = self.removeLines()
+        ##更新分数
+        added_Point = self.updatePoint(removed_Lines)
+        ##更新等级
+        added_Level = self.updateLevel(added_Point)
+        ##更新速度
+        self.updateSpeed(added_Level)
         ##刷新一个新的方块
         self.dto.gameAct.initRect(self.dto.next)
         self.dto.next = random.randint(1, 7)
@@ -80,14 +74,15 @@ class GameService():
             if self.dto.gameMap[point[0]][point[1]]:
                 return True
 
-    def plusPoint(self):
-        removedLines = 0
+    def removeLines(self):
+        removed_Lines = 0
         for mapY in range(self.dto.gameHeight):  # 逐行扫描方块地图
             if self.iscanRemove(mapY):
                 self.removeLine(mapY)
                 QSound.play(r"music\remove02.wav")
-                removedLines += 1
-        return removedLines
+                removed_Lines += 1
+        self.dto.nowRemoveLine += removed_Lines
+        return removed_Lines
 
     def iscanRemove(self, mapY):
         for mapX in range(self.dto.gameWidth):  # 行内逐个判断是否有方块
@@ -104,3 +99,22 @@ class GameService():
         else:
             for x in range(self.dto.gameWidth):
                 self.dto.gameMap[x][0] = 0
+
+    def updatePoint(self, removedLines):
+        if removedLines:
+            addedPoint = removedLines ** 2 * 10
+            self.dto.nowPoint += addedPoint
+            return addedPoint
+
+    def updateLevel(self, added_Point):
+        if added_Point:
+            added_Level = int(self.dto.nowPoint / 200) - self.dto.nowLevel
+            self.dto.nowLevel = int(self.dto.nowPoint / 200)
+            return added_Level
+
+    def updateSpeed(self, added_Level):
+        if self.dto.speed <= 50:
+            self.dto.speed = 50
+            return
+        if added_Level:
+            self.dto.speed = self.dto.speed - added_Level * 50

@@ -21,6 +21,7 @@ class CONST():
     ProcessImg=QImage("Graphics/game/process.png")
     PauseImg=QImage("Graphics/game/pause.png")
     Act_Size = 32  # 方块像素
+    GameSpeed=800
 
     NoShape = 0
     ZShape = 1
