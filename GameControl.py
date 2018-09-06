@@ -47,13 +47,17 @@ class GameControl():
             return
         self.gameService.startGame()
         self.timer = QTimer()
-        self.timer.setInterval(500)
+        print('first',self.timer)
+        self.timer.setInterval(self.gameWindow.gameDto.speed)
         self.timer.timeout.connect(self.keyDown)
-        self.timer.timeout.connect(self.resetTimer)
+        self.timer.timeout.connect(self.updateTimer)
         self.timer.start()
         self.gameWindow.update()
 
-    def resetTimer(self):
+    def updateTimer(self):
+        print(self.gameWindow.gameDto.speed)
+        self.timer.setInterval(self.gameWindow.gameDto.speed)
+        print('second',self.timer,self.timer.interval())
         if self.gameWindow.gameDto.isLosed:
             self.timer.timeout.disconnect(self.keyDown)
             self.timer.stop()

@@ -21,6 +21,7 @@ class GameDto():
         self.isStarted=0##游戏开始标志 0表述没开始，1表示开始了
         self.isLosed=0##游戏失败标志 0表示没输，1表示输了
         self.isPaused=False ##游戏暂停标志 False表示没暂停，True表示暂停
+        self.speed=800
 
 
 

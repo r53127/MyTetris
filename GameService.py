@@ -51,8 +51,17 @@ class GameService():
             ##算分
             self.dto.nowRemoveLine += removedLines
             self.dto.nowPoint += removedLines ** 2 * 10
-            ##升级
-            self.dto.nowLevel = int(self.dto.nowPoint / 200)
+            ##升级并刷新定时器间隔
+        newlevel = int(self.dto.nowPoint / 200)
+        print(self.dto.nowLevel,newlevel)
+        if newlevel>self.dto.nowLevel:
+            if self.dto.speed <= 50:
+                self.dto.speed = 50
+            else:
+                self.dto.speed = self.dto.speed - self.dto.nowLevel * 50
+            self.dto.nowLevel=newlevel
+
+
         ##刷新一个新的方块
         self.dto.gameAct.initRect(self.dto.next)
         self.dto.next = random.randint(1, 7)

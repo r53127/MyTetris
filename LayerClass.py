@@ -205,7 +205,7 @@ class ButtonLayer(LayerClass):
 
 class NextLayer(LayerClass):
     def __init__(self, x, y, w, h, parent=None):
-        # 初始化层的x/y坐标和长度/宽度
+        # 初始化层的x/y坐标和长度/宽度`
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
