@@ -1,6 +1,7 @@
 '''
 游戏界面图层
 '''
+import os
 
 from PyQt5.QtCore import QRect, QPoint, Qt
 from PyQt5.QtGui import QPixmap, QCursor, QFont
@@ -200,6 +201,7 @@ class ButtonLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
+        self.btn2.pressed.connect(self.parent.gameControl.keySetup)
 
 
 class NextLayer(LayerClass):
@@ -264,7 +266,19 @@ class BackLayer(LayerClass):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
+        self.backgrd_files=[]
+        self.initbackgrd()
 
     def paint(self, painter):
-        self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel % 9) + ".jpg")
-        painter.drawPixmap(self.x, self.y, self.w, self.h, self.BackImg)
+        if self.backgrd_files:
+            idx=self.gameDto.nowLevel%len(self.backgrd_files)
+            painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.backgrd_files[idx]))
+
+    def initbackgrd(self):
+        backgrd_path="Graphics\Backgroud"
+        if not os.path.exists(backgrd_path) or not os.path.isdir(backgrd_path):
+            return
+        dirs=os.listdir(backgrd_path)
+        for file in dirs:
+            if os.path.isfile(os.path.join(backgrd_path,file)):
+                self.backgrd_files.append(os.path.join(backgrd_path,file))
