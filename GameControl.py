@@ -76,8 +76,8 @@ class GameControl():
         self.gameWindow.gameDto.isPaused = not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
-        self.gameWindow.gameDto.nowRemoveLine += 1
-        self.gameService.updateSpeed(self.gameService.updateLevel(self.gameService.updatePoint(1)))
+        self.gameWindow.gameDto.nowRemoveLine += 2
+        self.gameService.updateSpeed(self.gameService.updateLevel(self.gameService.updatePoint(2)))
         self.gameWindow.update()
 
     def keySetup(self):
