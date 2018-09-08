@@ -152,7 +152,6 @@ class GameLayer(LayerClass):
                      shadowLeft=point[0]
                 if shadowRight<point[0]:
                     shadowRight=point[0]
-                print(shadowLeft,shadowRight)
             painter.drawImage(
                 QRect(self.x+shadowLeft*ACT_SIZE+SIZE, self.y+SIZE,(shadowRight-shadowLeft+1)*ACT_SIZE, (shadowHeight+1)*ACT_SIZE),
                 CONST.ShadowImg,
@@ -287,11 +286,6 @@ class BackLayer(LayerClass):
         self.backgrd_files=[]
         self.initbackgrd()
 
-    def paint(self, painter):
-        if self.backgrd_files:
-            idx=self.gameDto.nowLevel%len(self.backgrd_files)
-            painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.backgrd_files[idx]))
-
     def initbackgrd(self):
         backgrd_path="Graphics\Backgroud"
         if not os.path.exists(backgrd_path) or not os.path.isdir(backgrd_path):
@@ -300,3 +294,10 @@ class BackLayer(LayerClass):
         for file in dirs:
             if os.path.isfile(os.path.join(backgrd_path,file)):
                 self.backgrd_files.append(os.path.join(backgrd_path,file))
+
+    def paint(self, painter):
+        if self.backgrd_files:
+            idx=self.gameDto.nowLevel%len(self.backgrd_files)
+            painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.backgrd_files[idx]))
+
+
