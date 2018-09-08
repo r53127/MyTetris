@@ -3,9 +3,9 @@ import random
 from Const import CONST
 
 MIN_X = 0
-MAX_X = 9  # 宽最多10格
+MAX_X = CONST.GameWidth# 宽最多10格
 MIN_Y = 0
-MAX_Y = 17  # 长最多18格
+MAX_Y = CONST.GameHeight  # 长最多18格
 
 class GameRect():
 

@@ -23,6 +23,7 @@ class GameDto():
         self.isLosed=0##游戏失败标志 0表示没输，1表示输了
         self.isPaused=False ##游戏暂停标志 False表示没暂停，True表示暂停
         self.speed=CONST.GameSpeed
+        self.isShowShadow=True
 
 
 

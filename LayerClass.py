@@ -128,17 +128,35 @@ class GameLayer(LayerClass):
         if self.gameDto.isStarted:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
+            self.drawShadow(painter)
 
         # 打印地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
+                    print(self.gameDto.nowLevel % 8)
                     self.drawRect(mapX, mapY, painter, self.gameDto.nowLevel % 8)  # 使用余数号方块作为固定方块
         if self.gameDto.isLosed:
             painter.drawImage(
                 QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING, self.y + (self.h - OVERHEIGHT) / 2 + PADDING),
                 CONST.OverImg)
+
+    def drawShadow(self,painter):
+        if self.gameDto.isShowShadow:
+            shadowLeft=self.gameDto.gameAct.actPoints[0][0]
+            shadowRight=self.gameDto.gameAct.actPoints[0][0]
+            shadowHeight=CONST.GameHeight
+            for point in self.gameDto.gameAct.actPoints:
+                if shadowLeft>point[0]:
+                     shadowLeft=point[0]
+                if shadowRight<point[0]:
+                    shadowRight=point[0]
+                print(shadowLeft,shadowRight)
+            painter.drawImage(
+                QRect(self.x+shadowLeft*ACT_SIZE+SIZE, self.y+SIZE,(shadowRight-shadowLeft+1)*ACT_SIZE, (shadowHeight+1)*ACT_SIZE),
+                CONST.ShadowImg,
+                QRect(0, 0, 1, 1))
 
 
 class DBLayer(LayerClass):
