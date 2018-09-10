@@ -36,20 +36,20 @@ class Database(Data):
         self.conn.execute(insert_statement, (name, score, game_type))
         self.conn.commit()  # 修改类操作必须commit
 
-    def queryDB_ByName(self, name=None):
+    def loadDBData_ByName(self, name=None):
         # 查询
         query_statement = r'select * from user where name=?'
         self.cursor.execute(query_statement, (name,))  ##注意加括号，表示这是一个元组
         return self.cursor.fetchall()
 
-    def queryDB_ByField(self, field='name', fieldvalue=None):
+    def loadDBData_ByField(self, field='name', fieldvalue=None):
         # 查询
         query_statement = r'select * from user where ' + str(field) + "='" + str(fieldvalue) + "'"
         self.cursor.execute(query_statement)
 
         return self.cursor.fetchall()
 
-    def queryDB_ByFieldList(self, field='score', listNum=1):
+    def loadDBData_ByFieldList(self, field='score', listNum=1):
         # 查询
         query_statement = r'select * from user order by ' + str(field) + ' DESC limit ' + str(listNum)
         self.cursor.execute(query_statement)  ##注意加括号，表示这是一个元组
@@ -116,28 +116,31 @@ class DataDisk(Data):
         else:
             return -1 #文件不存在
 
-
-if __name__ == '__main__':
-    a = Database()
-    # a.insertDB('a',3000,1)
-    # a.insertDB('任坤', 100, 1)
-    # a.insertDB('b', 600, 1)
-    # a.insertDB('c', 900, 1)
-    # a.insertDB('f', 260, 1)
-    # a.queryDB_ByField('name', 'f')
-    # a.closeDB()
-    # open('data\player.dat', 'wb')
-    # b=DataDisk()
-    # p=GamePlayer('da',200)
-    # b.savePickleData(p)
-    # c=b.loadPickleData()
-    # print(c)
-    # for i in c:
-    #     print(i.name,i.point)
-    # shelve.open('data\player.dat')
-    # b=DataDisk()
-    # p=GamePlayer('da',200)
-    # b.saveShelveData(p)
+#
+# if __name__ == '__main__':
+#     # a = Database()
+#     # a.insertDB('a',3000,1)
+#     # a.insertDB('任坤', 100, 1)
+#     # a.insertDB('b', 600, 1)
+#     # a.insertDB('c', 900, 1)
+#     # a.insertDB('f', 260, 1)
+#     # a.queryDB_ByField('name', 'f')
+#     # a.closeDB()
+#     # open('data\player.dat', 'wb')
+#     # b=DataDisk()
+#     # p=GamePlayer('da',200)
+#     # b.savePickleData(p)
+#     # c=b.loadPickleData()
+#     # print(c)
+#     # for i in c:
+#     #     print(i.name,i.point)
+#     # shelve.open('data\player.dat')
+#     b=DataDisk()
+#     b.saveShelveData(GamePlayer('a',200))
+#     b.saveShelveData(GamePlayer('b', 200))
+#     b.saveShelveData(GamePlayer('c', 200))
+#     b.saveShelveData(GamePlayer('d', 200))
+#     b.saveShelveData(GamePlayer('e', 200))
     # c=b.loadShelveData()
     # print(c)
     # for i in c:

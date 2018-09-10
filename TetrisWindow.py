@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 
 import LayerClass
 from Const import CONST
+from Db import Database, DataDisk
 from GameControl import GameControl
 from GameDto import GameDto
 from GameService import GameService
@@ -45,7 +46,12 @@ class TetrisWindow(QMainWindow):
 
 
     def initComponent(self):
-        pass
+        self.db_data=Database()
+        self.disk_data=DataDisk()
+        self.gameDto.dbRcorder=self.db_data.loadDBData_ByFieldList('score',5)
+        self.gameDto.diskRecorder=self.disk_data.loadShelveData()
+        print(self.gameDto.dbRcorder)
+        print(self.gameDto.diskRecorder)
 
     def setGameControl(self, gameControl):
         self.gameControl = gameControl

@@ -167,7 +167,7 @@ class DBLayer(LayerClass):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         i = 0
         while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, 'NO DATA')
+            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+'\000'*10+str(self.gameDto.dbRcorder[i][2]))
             i = i + 1
 
 
