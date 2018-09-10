@@ -135,7 +135,6 @@ class GameLayer(LayerClass):
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
                 if gameMap[mapX][mapY]:
-                    print(self.gameDto.nowLevel % 8)
                     self.drawRect(mapX, mapY, painter, self.gameDto.nowLevel % 8)  # 使用余数号方块作为固定方块
         if self.gameDto.isLosed:
             painter.drawImage(
@@ -219,6 +218,10 @@ class ButtonLayer(LayerClass):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
         self.btn2.pressed.connect(self.parent.gameControl.keySetup)
+        # if self.gameDto.isStarted:
+        #     self.btn1.setDisabled(1)
+        # else:
+        #     self.btn1.setEnabled(1)
 
 
 class NextLayer(LayerClass):

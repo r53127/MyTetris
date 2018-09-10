@@ -84,5 +84,5 @@ class GameControl():
         self.gameWindow.update()
 
     def keySetup(self):
-        ##TODO
+        ##TODO 设置按钮功能
         pass
