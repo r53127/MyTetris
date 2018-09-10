@@ -48,7 +48,7 @@ class TetrisWindow(QMainWindow):
     def initComponent(self):
         self.db_data=Database()
         self.disk_data=DataDisk()
-        self.gameDto.dbRcorder=self.db_data.loadDBData_ByFieldList('score',5)
+        self.gameDto.dbRcorder=self.db_data.loadUserData('score',5)
         self.gameDto.diskRecorder=self.disk_data.loadShelveData()
 
     def setGameControl(self, gameControl):

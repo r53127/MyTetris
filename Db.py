@@ -7,10 +7,10 @@ from Player import GamePlayer
 
 
 class Data():
-    def loadData(self):
+    def loadUserData(self):
         pass
 
-    def saveData(self):
+    def saveUserData(self):
         pass
 
 
@@ -54,6 +54,18 @@ class Database(Data):
         query_statement = r'select * from user order by ' + str(field) + ' DESC limit ' + str(listNum)
         self.cursor.execute(query_statement)  ##注意加括号，表示这是一个元组
         return self.cursor.fetchall()
+
+    def loadUserData(self,field='score', listNum=1):##返回排序后的用户对象列表
+        players_data=self.loadDBData_ByFieldList(field,listNum)
+        players=[]
+        for i in range(listNum):
+            player_data=players_data[i]
+            players.append(GamePlayer(player_data[1],player_data[2]))
+        return players
+
+    def saveUserData(self,player):
+        self.insertDB(player.name,player.score,1)
+
 
     def closeDB(self):
         # 关闭Cursor:
@@ -107,6 +119,12 @@ class DataDisk(Data):
                 players = pickle.load(f)  # read file and build object
                 return players
 
+    def loadUserData(self):  ##返回排序后的用户对象列表
+        pass
+
+    def saveUserData(self):
+        pass
+
     def isFileExist(self,file_path):
         if os.path.exists(file_path):
             if os.path.getsize(file_path):
@@ -117,16 +135,16 @@ class DataDisk(Data):
             return -1 #文件不存在
 
 #
-# if __name__ == '__main__':
-#     # a = Database()
+if __name__ == '__main__':
+    a = Database()
 #     # a.insertDB('a',3000,1)
 #     # a.insertDB('任坤', 100, 1)
 #     # a.insertDB('b', 600, 1)
 #     # a.insertDB('c', 900, 1)
 #     # a.insertDB('f', 260, 1)
-#     # a.queryDB_ByField('name', 'f')
-#     # a.closeDB()
-#     # open('data\player.dat', 'wb')
+    a.loadDBData_ByFieldList('score', 5)
+    # a.closeDB()
+    # open('data\player.dat', 'wb')
 #     # b=DataDisk()
 #     # p=GamePlayer('da',200)
 #     # b.savePickleData(p)

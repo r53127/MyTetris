@@ -2,6 +2,7 @@
 游戏界面图层
 '''
 import os
+from abc import abstractmethod, ABCMeta
 
 from PyQt5.QtCore import QRect, QPoint, Qt
 from PyQt5.QtGui import QPixmap, QCursor, QFont
@@ -124,13 +125,13 @@ class GameLayer(LayerClass):
         OVERWIDTH = CONST.OverImg.width()
         OVERHEIGHT = CONST.OverImg.height()
         self.createlayer(painter)
-        # 打印下落方块
+        # 绘制下落方块
         if self.gameDto.isStarted:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
             self.drawShadow(painter)
 
-        # 打印地图
+        # 绘制地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
@@ -157,36 +158,41 @@ class GameLayer(LayerClass):
                 QRect(0, 0, 1, 1))
 
 
-class DBLayer(LayerClass):
+class DataLayer(LayerClass, metaclass=ABCMeta):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
 
+    @abstractmethod
     def paint(self, painter):
-        self.createlayer(painter)
+        pass
+
+    def drawData(self,painter,players_recorder):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
-        for i in  range(len(self.gameDto.dbRcorder)):
-            percent=self.gameDto.nowPoint / self.gameDto.dbRcorder[i][2]
-            if percent>=1:
-                percent=1
-            self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+str(self.gameDto.dbRcorder[i][2]).rjust(28))
-
-
-class WorldLayer(LayerClass):
-    def __init__(self, x, y, w, h, parent=None):
-        # 初始化层的x/y坐标和长度/宽度
-        super().__init__(x, y, w, h, parent)
-
-    def paint(self, painter):
-        self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
-        i=0
-        for player in self.gameDto.diskRecorder:
+        i = 0
+        for player in  players_recorder:
             percent=self.gameDto.nowPoint / player.point
             if percent>=1:
                 percent=1
-            self.drawProcess(painter, percent, 15, CONST.WorldImg.height() + 20 + i * 40, player.name+str(player.point).rjust(28))
+            self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, player.name+str(player.point).rjust(28))
             i=i+1
+
+
+class DBLayer(DataLayer):
+    def __init__(self, x, y, w, h, parent=None):
+        # 初始化层的x/y坐标和长度/宽度
+        super().__init__(x, y, w, h, parent)
+
+    def paint(self, painter):
+        self.createlayer(painter)
+        self.drawData(painter,self.gameDto.dbRcorder)
+
+
+class WorldLayer(DataLayer):
+
+    def paint(self, painter):
+        self.createlayer(painter)
+        self.drawData(painter,self.gameDto.diskRecorder)
 
 
 class ButtonLayer(LayerClass):
