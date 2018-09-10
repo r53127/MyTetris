@@ -266,5 +266,10 @@ class BackLayer(LayerClass):
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
+        backgrd_dir="Graphics/Backgroud"
+        if not os.path.isdir(backgrd_dir) and not os.path.isfile(backgrd_dir):
+            return False
+
+
         self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel % 9) + ".jpg")
         painter.drawPixmap(self.x, self.y, self.w, self.h, self.BackImg)
