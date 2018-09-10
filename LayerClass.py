@@ -96,7 +96,8 @@ class LayerClass():
     # 画值槽进度条
     # x,y 为框内要调整的像素
     # num ,showString为要显示的数字长度和要显示的字符
-    def drawProcess(self, painter, num, x, y, showString):
+    #percent=recorderPoint/nowPoint
+    def drawProcess(self, painter, percent, x, y, showString):
         levelupW = CONST.ProcessImg.width()
         levelupH = CONST.ProcessImg.height()
         painter.setBrush(Qt.black)
@@ -105,11 +106,10 @@ class LayerClass():
         painter.drawRect(self.x + x + 2, self.y + y + 4, self.w - 2 * PADDING - 4, levelupH)
         painter.setBrush(Qt.black)
         painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
-        w = (num % 200) / 200 * levelupW
         painter.drawImage(
-            QRect(self.x + x + 4, self.y + y + 7, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 5),
+            QRect(self.x + x + 4, self.y + y + 7, percent* (self.w - 2 * PADDING - 8) , levelupH - 5),
             CONST.ProcessImg,
-            QRect(w, 0, 1, levelupH))
+            QRect(percent*levelupW-1, 0, 1, levelupH))
         painter.setPen(Qt.white)
         painter.setFont(QFont('Mine', 10, QFont.Bold))
         painter.drawText(self.x + x + 6, self.y + y + levelupH - 4, showString)
@@ -165,10 +165,11 @@ class DBLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
-        i = 0
-        while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+'\000'*10+str(self.gameDto.dbRcorder[i][2]))
-            i = i + 1
+        for i in  range(len(self.gameDto.dbRcorder)):
+            percent=self.gameDto.nowPoint / self.gameDto.dbRcorder[i][2]
+            if percent>=1:
+                percent=1
+            self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+str(self.gameDto.dbRcorder[i][2]).rjust(28))
 
 
 class WorldLayer(LayerClass):
@@ -179,10 +180,13 @@ class WorldLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
-        i = 0
-        while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.WorldImg.height() + 20 + i * 40, 'NO DATA')
-            i = i + 1
+        i=0
+        for player in self.gameDto.diskRecorder:
+            percent=self.gameDto.nowPoint / player.point
+            if percent>=1:
+                percent=1
+            self.drawProcess(painter, percent, 15, CONST.WorldImg.height() + 20 + i * 40, player.name+str(player.point).rjust(28))
+            i=i+1
 
 
 class ButtonLayer(LayerClass):
@@ -269,7 +273,7 @@ class PointLayer(LayerClass):
         painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), CONST.RmlineImg)
         self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
         self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
-        self.drawProcess(painter, self.gameDto.nowPoint, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
+        self.drawProcess(painter, (self.gameDto.nowPoint%200)/200, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
 
 
 class AboutLayer(LayerClass):
