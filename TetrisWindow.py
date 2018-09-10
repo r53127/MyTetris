@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPainter, QBitmap, QCursor, QIcon
+from PyQt5.QtGui import QPainter, QCursor, QIcon
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
