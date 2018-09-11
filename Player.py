@@ -1,4 +1,4 @@
-class Player():
+class GamePlayer():
     def __init__(self,name,point):
         self._name=name
         self._point=point
@@ -14,7 +14,7 @@ class Player():
 
     @property
     def point(self):
-        return self._name
+        return self._point
     @point.setter
     def point(self, value):
         if not isinstance(value, int):

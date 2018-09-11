@@ -5,6 +5,7 @@
 '''
 
 from PyQt5.QtCore import QTimer
+from PyQt5.QtMultimedia import QSound
 
 
 class GameControl():
@@ -19,7 +20,8 @@ class GameControl():
         self.gameWindow.update()
 
     def keyDown(self):
-        self.gameService.keyDown()
+        if self.gameService.keyDown():
+            QSound.play("music\move.wav")
         self.gameWindow.update()
 
     def keyLeft(self):
@@ -31,7 +33,7 @@ class GameControl():
         self.gameWindow.update()
 
     def keyFastdown(self):
-        if self.gameWindow.gameDto.isPaused:
+        if not self.gameWindow.gameDto.isStarted or self.gameWindow.gameDto.isPaused:
             return
         # iscanFastfall=self.gameService.keyDown()
         # while iscanFastfall:
@@ -39,6 +41,7 @@ class GameControl():
         ##循环代码优化
         while (1):
             if not self.gameService.keyDown():
+                QSound.play(r"music\remove01.wav")
                 break
         self.gameWindow.update()
 
@@ -76,6 +79,10 @@ class GameControl():
         self.gameWindow.gameDto.isPaused = not self.gameWindow.gameDto.isPaused
 
     def keyTest(self):
-        self.gameWindow.gameDto.nowRemoveLine += 1
-        self.gameService.updateSpeed(self.gameService.updateLevel(self.gameService.updatePoint(1)))
+        self.gameWindow.gameDto.nowRemoveLine += 2
+        self.gameService.updateSpeed(self.gameService.updateLevel(self.gameService.updatePoint(2)))
         self.gameWindow.update()
+
+    def keySetup(self):
+        ##TODO 设置按钮功能
+        pass

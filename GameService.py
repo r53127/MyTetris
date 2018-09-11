@@ -43,7 +43,6 @@ class GameService():
         if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:  ##暂停或未开始或输了
             return False  ##不能下移
         if self.dto.gameAct.move(0, 1, self.dto.gameMap):
-            QSound.play("music\move.wav")
             return True  ##正常下移
         ##移不动刷新地图
         for act in self.dto.gameAct.actPoints:

@@ -1,6 +1,7 @@
 '''
 游戏界面图层
 '''
+import os
 
 from PyQt5.QtCore import QRect, QPoint, Qt
 from PyQt5.QtGui import QPixmap, QCursor, QFont
@@ -127,6 +128,7 @@ class GameLayer(LayerClass):
         if self.gameDto.isStarted:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
+            self.drawShadow(painter)
 
         # 打印地图
         gameMap = self.gameDto.gameMap
@@ -139,6 +141,21 @@ class GameLayer(LayerClass):
                 QPoint(self.x + (self.w - OVERWIDTH) / 2 + PADDING, self.y + (self.h - OVERHEIGHT) / 2 + PADDING),
                 CONST.OverImg)
 
+    def drawShadow(self,painter):
+        if self.gameDto.isShowShadow:
+            shadowLeft=self.gameDto.gameAct.actPoints[0][0]
+            shadowRight=self.gameDto.gameAct.actPoints[0][0]
+            shadowHeight=CONST.GameHeight
+            for point in self.gameDto.gameAct.actPoints:
+                if shadowLeft>point[0]:
+                     shadowLeft=point[0]
+                if shadowRight<point[0]:
+                    shadowRight=point[0]
+            painter.drawImage(
+                QRect(self.x+shadowLeft*ACT_SIZE+SIZE, self.y+SIZE,(shadowRight-shadowLeft+1)*ACT_SIZE, (shadowHeight+1)*ACT_SIZE),
+                CONST.ShadowImg,
+                QRect(0, 0, 1, 1))
+
 
 class DBLayer(LayerClass):
     def __init__(self, x, y, w, h, parent=None):
@@ -150,7 +167,7 @@ class DBLayer(LayerClass):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         i = 0
         while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, 'NO DATA')
+            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+'\000'*10+str(self.gameDto.dbRcorder[i][2]))
             i = i + 1
 
 
@@ -200,6 +217,11 @@ class ButtonLayer(LayerClass):
     def paint(self, painter):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
+        self.btn2.pressed.connect(self.parent.gameControl.keySetup)
+        # if self.gameDto.isStarted:
+        #     self.btn1.setDisabled(1)
+        # else:
+        #     self.btn1.setEnabled(1)
 
 
 class NextLayer(LayerClass):
@@ -264,12 +286,21 @@ class BackLayer(LayerClass):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
+        self.backgrd_files=[]
+        self.initbackgrd()
+
+    def initbackgrd(self):
+        backgrd_path="Graphics\Backgroud"
+        if not os.path.exists(backgrd_path) or not os.path.isdir(backgrd_path):
+            return
+        dirs=os.listdir(backgrd_path)
+        for file in dirs:
+            if os.path.isfile(os.path.join(backgrd_path,file)):
+                self.backgrd_files.append(os.path.join(backgrd_path,file))
 
     def paint(self, painter):
-        backgrd_dir="Graphics/Backgroud"
-        if not os.path.isdir(backgrd_dir) and not os.path.isfile(backgrd_dir):
-            return False
+        if self.backgrd_files:
+            idx=self.gameDto.nowLevel%len(self.backgrd_files)
+            painter.drawPixmap(self.x, self.y, self.w, self.h, QPixmap(self.backgrd_files[idx]))
 
 
-        self.BackImg = QPixmap("Graphics/Backgroud/00" + str(self.gameDto.nowLevel % 9) + ".jpg")
-        painter.drawPixmap(self.x, self.y, self.w, self.h, self.BackImg)

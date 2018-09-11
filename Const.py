@@ -14,14 +14,16 @@ class CONST():
     ScoreImg = QImage("Graphics/game/score.png")
     RmlineImg = QImage("Graphics/game/rmline.png")
     ActImg = QImage("Graphics/game/rect.png")
-    BackImg = QImage("Graphics/Backgroud/screen1.jpg")
     OverImg = QImage("Graphics/game/over.png")
     NumImge = QImage("Graphics/game/number.png")
     SetupImg = QImage("Graphics/game/setup.png")
     ProcessImg=QImage("Graphics/game/process.png")
     PauseImg=QImage("Graphics/game/pause.png")
+    ShadowImg=QImage("Graphics/game/shadow.png")
     Act_Size = 32  # 方块像素
     GameSpeed=800
+    GameWidth=9
+    GameHeight=17
 
     NoShape = 0
     ZShape = 1
