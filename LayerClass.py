@@ -2,6 +2,7 @@
 游戏界面图层
 '''
 import os
+from abc import abstractmethod, ABCMeta
 
 from PyQt5.QtCore import QRect, QPoint, Qt
 from PyQt5.QtGui import QPixmap, QCursor, QFont
@@ -96,7 +97,8 @@ class LayerClass():
     # 画值槽进度条
     # x,y 为框内要调整的像素
     # num ,showString为要显示的数字长度和要显示的字符
-    def drawProcess(self, painter, num, x, y, showString):
+    #percent=recorderPoint/nowPoint
+    def drawProcess(self, painter, percent, x, y, **showplayer_or_showstring):
         levelupW = CONST.ProcessImg.width()
         levelupH = CONST.ProcessImg.height()
         painter.setBrush(Qt.black)
@@ -105,14 +107,18 @@ class LayerClass():
         painter.drawRect(self.x + x + 2, self.y + y + 4, self.w - 2 * PADDING - 4, levelupH)
         painter.setBrush(Qt.black)
         painter.drawRect(self.x + x + 4, self.y + y + 6, self.w - 2 * PADDING - 8, levelupH - 4)
-        w = (num % 200) / 200 * levelupW
         painter.drawImage(
-            QRect(self.x + x + 4, self.y + y + 7, w * (self.w - 2 * PADDING - 8) / levelupW, levelupH - 5),
+            QRect(self.x + x + 4, self.y + y + 7, percent* (self.w - 2 * PADDING - 8) , levelupH - 5),
             CONST.ProcessImg,
-            QRect(w, 0, 1, levelupH))
+            QRect(percent*levelupW-1, 0, 1, levelupH))
         painter.setPen(Qt.white)
         painter.setFont(QFont('Mine', 10, QFont.Bold))
-        painter.drawText(self.x + x + 6, self.y + y + levelupH - 4, showString)
+        #使用命名关键字参数,因为要传递的参数不确定，如果没有玩家纪录则打印字符串，如有存在记录则打印玩家信息
+        if 'showstring' in showplayer_or_showstring:
+            painter.drawText(self.x + x + 6, self.y + y + levelupH - 4, showplayer_or_showstring['showstring'])
+        if 'showplayer' in showplayer_or_showstring:
+            painter.drawText(self.x + x + 6, self.y + y + levelupH - 4, showplayer_or_showstring['showplayer'].name)
+            painter.drawText(self.x + x + 6+(self.w - 2 * PADDING - 8)/2, self.y + y + levelupH - 4, str(showplayer_or_showstring['showplayer'].point).rjust(14))
 
 
 class GameLayer(LayerClass):
@@ -124,17 +130,17 @@ class GameLayer(LayerClass):
         OVERWIDTH = CONST.OverImg.width()
         OVERHEIGHT = CONST.OverImg.height()
         self.createlayer(painter)
-        # 打印下落方块
+        # 绘制下落方块
         if self.gameDto.isStarted:
             for point in self.gameDto.gameAct.actPoints:
                 self.drawRect(point[0], point[1], painter, self.gameDto.gameAct.rectCode)
             self.drawShadow(painter)
 
-        # 打印地图
+        # 绘制地图
         gameMap = self.gameDto.gameMap
         for mapX in range(len(gameMap)):
             for mapY in range(len(gameMap[mapX])):
-                if gameMap[mapX][mapY]:
+                if gameMap[mapX][mapY]:#如果该坐标为1，则绘制一个方块
                     self.drawRect(mapX, mapY, painter, self.gameDto.nowLevel % 8)  # 使用余数号方块作为固定方块
         if self.gameDto.isLosed:
             painter.drawImage(
@@ -146,6 +152,7 @@ class GameLayer(LayerClass):
             shadowLeft=self.gameDto.gameAct.actPoints[0][0]
             shadowRight=self.gameDto.gameAct.actPoints[0][0]
             shadowHeight=CONST.GameHeight
+            #根据下落方块的旋转情况获取阴影的最大左右边界
             for point in self.gameDto.gameAct.actPoints:
                 if shadowLeft>point[0]:
                      shadowLeft=point[0]
@@ -157,32 +164,48 @@ class GameLayer(LayerClass):
                 QRect(0, 0, 1, 1))
 
 
-class DBLayer(LayerClass):
+class DataLayer(LayerClass, metaclass=ABCMeta):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
 
+    @abstractmethod
     def paint(self, painter):
-        self.createlayer(painter)
+        pass
+
+    ##绘制5个玩家纪录
+    def drawData(self,painter,players_recorder):
         painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         i = 0
-        while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.DBImg.height() + 20 + 40 * i, str(self.gameDto.dbRcorder[i][1])+'\000'*10+str(self.gameDto.dbRcorder[i][2]))
-            i = i + 1
+        while i<5:
+            #判断要绘制的纪录是否超界
+            if i<len(players_recorder):
+                player=players_recorder[i]
+                percent = self.gameDto.nowPoint / player.point
+                if percent >= 1:
+                    percent = 1
+                self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, showplayer=player)
+            else:
+                #纪录不存在
+                self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, showstring='NO DATA')
+            i=i+1
 
 
-class WorldLayer(LayerClass):
+class DBLayer(DataLayer):
     def __init__(self, x, y, w, h, parent=None):
         # 初始化层的x/y坐标和长度/宽度
         super().__init__(x, y, w, h, parent)
 
     def paint(self, painter):
         self.createlayer(painter)
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
-        i = 0
-        while i < 5:
-            self.drawProcess(painter, self.gameDto.nowPoint, 15, CONST.WorldImg.height() + 20 + i * 40, 'NO DATA')
-            i = i + 1
+        self.drawData(painter,self.gameDto.dbRcorder)
+
+
+class WorldLayer(DataLayer):
+
+    def paint(self, painter):
+        self.createlayer(painter)
+        self.drawData(painter,self.gameDto.diskRecorder)
 
 
 class ButtonLayer(LayerClass):
@@ -269,7 +292,7 @@ class PointLayer(LayerClass):
         painter.drawImage(QPoint(self.x + SIZE, self.y + SCORE_IMG_HEIGHT + SIZE), CONST.RmlineImg)
         self.drawNumberAlignRight(self.gameDto.nowPoint, self.w, 0, painter, 0.7)
         self.drawNumberAlignRight(self.gameDto.nowRemoveLine, self.w, SCORE_IMG_HEIGHT, painter, 0.7)
-        self.drawProcess(painter, self.gameDto.nowPoint, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, '下一级')
+        self.drawProcess(painter, (self.gameDto.nowPoint%200)/200, PADDING, 2 * SCORE_IMG_HEIGHT + SIZE, showstring='下一级')
 
 
 class AboutLayer(LayerClass):

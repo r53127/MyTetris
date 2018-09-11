@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPainter, QBitmap, QCursor, QIcon
+from PyQt5.QtGui import QPainter, QCursor, QIcon
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
@@ -48,10 +48,8 @@ class TetrisWindow(QMainWindow):
     def initComponent(self):
         self.db_data=Database()
         self.disk_data=DataDisk()
-        self.gameDto.dbRcorder=self.db_data.loadDBData_ByFieldList('score',5)
-        self.gameDto.diskRecorder=self.disk_data.loadShelveData()
-        print(self.gameDto.dbRcorder)
-        print(self.gameDto.diskRecorder)
+        self.gameDto.dbRcorder=self.db_data.loadUserData('score',5)
+        self.gameDto.diskRecorder=self.disk_data.loadUserData()
 
     def setGameControl(self, gameControl):
         self.gameControl = gameControl
