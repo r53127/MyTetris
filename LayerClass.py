@@ -187,6 +187,7 @@ class DataLayer(LayerClass, metaclass=ABCMeta):
                 self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, showplayer=player)
             else:
                 #纪录不存在
+                percent=0
                 self.drawProcess(painter, percent, 15, CONST.DBImg.height() + 20 + 40 * i, showstring='NO DATA')
             i=i+1
 

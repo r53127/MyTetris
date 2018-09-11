@@ -98,6 +98,7 @@ class DataDisk(Data):
             except:
                 # QMessageBox.information(None, '提示', '本地数据不存在！')
                 print('本地数据不存在！')
+                return []
             else:
                 return players
 
@@ -114,13 +115,15 @@ class DataDisk(Data):
                 pickle.dump([player], f)
 
     def loadPickleData(self):
-        if self.isFileExist(self.data_path):
+        if self.isFileExist(self.data_path)==1:
             with open(self.data_path, 'rb') as f:
                 players = pickle.load(f)  # read file and build object
                 return players
+        else:
+            return []
 
     def loadUserData(self):  ##返回排序后的用户对象列表
-        players=self.loadShelveData()
+        players=self.loadPickleData()
         players.sort(key=lambda x:x.point,reverse=True)
         return players
 
@@ -136,37 +139,17 @@ class DataDisk(Data):
         else:
             return -1 #文件不存在
 
-#
+
 # if __name__ == '__main__':
-    # a = Database()
-#     # a.insertDB('a',3000,1)
-#     # a.insertDB('任坤', 100, 1)
-#     # a.insertDB('b', 600, 1)
-#     # a.insertDB('c', 900, 1)
-#     # a.insertDB('f', 260, 1)
-#     a.loadDBData_ByFieldList('score', 5)
-    # a.closeDB()
-    # open('data\player.dat', 'wb')
-    # b=DataDisk()
-    # p=GamePlayer('dddd',200)
-    # # b.savePickleData(p)
-#     # b.savePickleData(p)
-
-#     # for i in c:
-#     #     print(i.name,i.point)
-# #     # shelve.open('data\player.dat')
+#     # a = Database()
+# #     # a.insertDB('a',3000,1)
+# #     # a.insertDB('任坤', 100, 1)
+# #     # a.insertDB('b', 600, 1)
+# #     # a.insertDB('c', 900, 1)
+# #     # a.insertDB('f', 260, 1)
+# #     a.loadDBData_ByFieldList('score', 5)
+#     # a.closeDB()
+#     # open('data\player.dat', 'wb')
 #     b=DataDisk()
-#     b.saveShelveData(GamePlayer('小王',100))
-#     b.saveShelveData(GamePlayer('小不', 2000))
-#     b.saveShelveData(GamePlayer('小的', 500))
-#     c=b.loadShelveData()
-#     print(c)
-#     for i in c:
-#         print(i.name,i.point)
-
-    # with open(b.data_path, 'ab+') as f:
-    #     pickle.dump(p, f)  # serialize and save object
-    #
-    # c=b.loadPickleData()
-    # print(c)
-    # print(c.name,c.point)
+#     p=GamePlayer('a',100)
+#     b.savePickleData(p)
