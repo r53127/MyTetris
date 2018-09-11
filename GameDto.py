@@ -9,8 +9,8 @@ from GameRect import GameRect
 
 class GameDto():
     def __init__(self):
-        self.gameHeight=18
-        self.gameWidth=10
+        self.gameHeight=CONST.GameHeight+1
+        self.gameWidth=CONST.GameWidth+1
         self.dbRcorder=[]
         self.diskRecorder=[]
         self.gameMap=[[0] * self.gameHeight for i in range(self.gameWidth)] #方块地图为10*18
