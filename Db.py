@@ -58,7 +58,7 @@ class Database(Data):
     def loadUserData(self,field='score', listNum=1):##返回排序后的用户对象列表
         players_data=self.loadDBData_ByFieldList(field,listNum)
         players=[]
-        for i in range(listNum):
+        for i in range(len(players_data)):
             player_data=players_data[i]
             players.append(GamePlayer(player_data[1],player_data[2]))
         return players
@@ -77,8 +77,8 @@ class DataDisk(Data):
         self.data_path='data\player.dat'
 
     #shelve是用key来访问的，使用起来和字典类似
-    #可用shelf.get()默认返回None来检测空字典
-    #shelve可以像字典一样同时操作多个名称的对象，但pickle只能同时操作一个对象
+    #也可用shelf.get()默认返回None来检测空字典
+    #shelve可以像字典一样同时操作多个名称的数据对象，但pickle只能同时操作一个数据对象
     def saveShelveData(self,player):
         with shelve.open(self.data_path) as sh:
             sh.writeback=True
@@ -120,7 +120,9 @@ class DataDisk(Data):
                 return players
 
     def loadUserData(self):  ##返回排序后的用户对象列表
-        pass
+        players=self.loadShelveData()
+        players.sort(key=lambda x:x.point,reverse=True)
+        return players
 
     def saveUserData(self):
         pass
@@ -135,32 +137,36 @@ class DataDisk(Data):
             return -1 #文件不存在
 
 #
-if __name__ == '__main__':
-    a = Database()
+# if __name__ == '__main__':
+    # a = Database()
 #     # a.insertDB('a',3000,1)
 #     # a.insertDB('任坤', 100, 1)
 #     # a.insertDB('b', 600, 1)
 #     # a.insertDB('c', 900, 1)
 #     # a.insertDB('f', 260, 1)
-    a.loadDBData_ByFieldList('score', 5)
+#     a.loadDBData_ByFieldList('score', 5)
     # a.closeDB()
     # open('data\player.dat', 'wb')
-#     # b=DataDisk()
-#     # p=GamePlayer('da',200)
+    # b=DataDisk()
+    # p=GamePlayer('dddd',200)
+    # # b.savePickleData(p)
 #     # b.savePickleData(p)
-#     # c=b.loadPickleData()
-#     # print(c)
+
 #     # for i in c:
 #     #     print(i.name,i.point)
-#     # shelve.open('data\player.dat')
+# #     # shelve.open('data\player.dat')
 #     b=DataDisk()
-#     b.saveShelveData(GamePlayer('a',200))
-#     b.saveShelveData(GamePlayer('b', 200))
-#     b.saveShelveData(GamePlayer('c', 200))
-#     b.saveShelveData(GamePlayer('d', 200))
-#     b.saveShelveData(GamePlayer('e', 200))
-    # c=b.loadShelveData()
-    # print(c)
-    # for i in c:
-    #     print(i.name,i.point)
+#     b.saveShelveData(GamePlayer('小王',100))
+#     b.saveShelveData(GamePlayer('小不', 2000))
+#     b.saveShelveData(GamePlayer('小的', 500))
+#     c=b.loadShelveData()
+#     print(c)
+#     for i in c:
+#         print(i.name,i.point)
 
+    # with open(b.data_path, 'ab+') as f:
+    #     pickle.dump(p, f)  # serialize and save object
+    #
+    # c=b.loadPickleData()
+    # print(c)
+    # print(c.name,c.point)
