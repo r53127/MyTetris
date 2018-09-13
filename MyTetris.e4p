@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-6.0.dtd">
+<!-- eric project file for project MyTetris -->
+<!-- Saved: 2018-09-13, 00:58:26 -->
+<!-- Copyright (C) 2018 ,  -->
+<Project version="6.0">
+  <Language></Language>
+  <Hash>d1d5fb357f00fa3d05d3e87077a54aa7b9c6be04</Hash>
+  <ProgLanguage mixed="0">Python3</ProgLanguage>
+  <ProjectType>PyQt5</ProjectType>
+  <Version>0.1</Version>
+  <Author></Author>
+  <Email></Email>
+  <Eol index="0"/>
+  <Sources>
+    <Source>Const.py</Source>
+    <Source>Db.py</Source>
+    <Source>GameCfg.py</Source>
+    <Source>GameControl.py</Source>
+    <Source>GameDto.py</Source>
+    <Source>GameRect.py</Source>
+    <Source>GameService.py</Source>
+    <Source>LayerClass.py</Source>
+    <Source>Player.py</Source>
+    <Source>SavePointDialog.py</Source>
+    <Source>TetrisWindow.py</Source>
+    <Source>Ui_SavePointDialog.py</Source>
+    <Source>__init__.py</Source>
+  </Sources>
+  <Forms>
+    <Form>SavePointDialog.ui</Form>
+  </Forms>
+  <Others>
+    <Other>MyTetris.e4p</Other>
+  </Others>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.e4p" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
+    <FiletypeAssociation pattern="*.md" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.proto" type="PROTOCOLS"/>
+    <FiletypeAssociation pattern="*.py" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.qrc" type="RESOURCES"/>
+    <FiletypeAssociation pattern="*.rst" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.txt" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.ui" type="FORMS"/>
+    <FiletypeAssociation pattern="README" type="OTHERS"/>
+    <FiletypeAssociation pattern="README.*" type="OTHERS"/>
+  </FiletypeAssociations>
+</Project>

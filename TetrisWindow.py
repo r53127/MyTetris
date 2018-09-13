@@ -11,6 +11,7 @@ from Db import Database, DataDisk
 from GameControl import GameControl
 from GameDto import GameDto
 from GameService import GameService
+from SavePointDialog import SavePointDialog
 
 
 class TetrisWindow(QMainWindow):
@@ -50,6 +51,7 @@ class TetrisWindow(QMainWindow):
         self.disk_data=DataDisk()
         self.gameDto.dbRcorder=self.db_data.loadUserData('score',5)
         self.gameDto.diskRecorder=self.disk_data.loadUserData()
+        self.savePointDialog=SavePointDialog(parent=self)
 
     def setGameControl(self, gameControl):
         self.gameControl = gameControl
@@ -116,7 +118,7 @@ if __name__ == '__main__':
     # 创建游戏面板(连接游戏数据源)
     gameWin = TetrisWindow(gameDto)
     # 创建游戏逻辑块（连接游戏数据源）
-    gameServ = GameService(gameDto)
+    gameServ = GameService(gameDto,gameWin)
     # 创建游戏控制器（链接游戏面板和游戏逻辑块）
     gameCtrl = GameControl(gameWin, gameServ)
     # 安装游戏控制器

@@ -9,8 +9,9 @@ from Const import CONST
 
 
 class GameService():
-    def __init__(self, dto):
+    def __init__(self, dto,gameWin):
         self.dto = dto
+        self.gameWin=gameWin
 
     def startGame(self):
         if not self.dto.isStarted:
@@ -67,6 +68,7 @@ class GameService():
         self.dto.isStarted = 0
         self.dto.isLosed = 1
         QSound.play(r"music\lose.wav")
+        self.gameWin.savePointDialog.show()
 
     def checkLosed(self):
         for point in self.dto.gameAct.actPoints:
