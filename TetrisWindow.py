@@ -11,6 +11,7 @@ from Db import Database, DataDisk
 from GameControl import GameControl
 from GameDto import GameDto
 from GameService import GameService
+from Player import GamePlayer
 from SavePointDialog import SavePointDialog
 
 
@@ -45,12 +46,28 @@ class TetrisWindow(QMainWindow):
         self.setWindowOpacity(1)  # set transparency
         self.show()
 
-
     def initComponent(self):
         self.db_data=Database()
         self.disk_data=DataDisk()
         self.reloadData()
-        self.savePointDialog=SavePointDialog(parent=self)
+        self.savePointDialog=SavePointDialog(parent=self)#初始化玩家輸入姓名窗口
+
+    #加載玩家數據
+    def reloadData(self):
+        self.gameDto.dbRcorder = self.db_data.loadUserData('score', 5)
+        self.gameDto.diskRecorder = self.disk_data.loadUserData()
+    #保存玩家數據
+
+    def saveData(self,playername):
+        try:
+            if self.gameDto.nowPoint==0:
+                return
+            player = GamePlayer(playername.strip(), self.gameDto.nowPoint)
+            self.db_data.saveUserData(player)
+            self.disk_data.saveUserData(player)
+            self.reloadData()
+        except BaseException as e:
+            print('Error is :', e)
 
     def setGameControl(self, gameControl):
         self.gameControl = gameControl
@@ -94,10 +111,6 @@ class TetrisWindow(QMainWindow):
     def mouseReleaseEvent(self, QMouseEvent):
         self.m_drag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
-
-    def reloadData(self):
-        self.gameDto.dbRcorder = self.db_data.loadUserData('score', 5)
-        self.gameDto.diskRecorder = self.disk_data.loadUserData()
 
     def paintEvent(self, QPaintEvent):
         try:

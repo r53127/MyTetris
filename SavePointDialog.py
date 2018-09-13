@@ -7,7 +7,6 @@ Module implementing SavePointDialog.
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from Player import GamePlayer
 from Ui_SavePointDialog import Ui_Dialog
 
 
@@ -51,11 +50,9 @@ class SavePointDialog(QDialog, Ui_Dialog):
         Slot documentation goes here.
         """
         if self.checkLineEdit():
-            player = GamePlayer(self.lineEdit.text(), self.parent.gameDto.nowPoint)
-            self.parent.db_data.saveUserData(player)
-            self.parent.disk_data.saveUserData(player)
-            self.parent.reloadData()
+            self.parent.saveData(self.lineEdit.text())
             self.close()
+
 
     @pyqtSlot()
     def on_pushButton_2_clicked(self):
