@@ -96,10 +96,12 @@ class TetrisWindow(QMainWindow):
         self.m_drag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
 
+    def reloadData(self):
+        self.gameDto.dbRcorder = self.db_data.loadUserData('score', 5)
+        self.gameDto.diskRecorder = self.disk_data.loadUserData()
+
     def paintEvent(self, QPaintEvent):
         try:
-            self.gameDto.dbRcorder = self.db_data.loadUserData('score', 5)
-            self.gameDto.diskRecorder = self.disk_data.loadUserData()
             painter = QPainter(self)
             for layer in self.layers:
                 layer.paint(painter)  # 显示layer

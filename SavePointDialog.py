@@ -54,6 +54,7 @@ class SavePointDialog(QDialog, Ui_Dialog):
             player = GamePlayer(self.lineEdit.text(), self.parent.gameDto.nowPoint)
             self.parent.db_data.saveUserData(player)
             self.parent.disk_data.saveUserData(player)
+            self.parent.reloadData()
             self.close()
 
     @pyqtSlot()
