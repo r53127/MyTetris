@@ -68,6 +68,7 @@ class GameService():
         self.dto.isStarted = 0
         self.dto.isLosed = 1
         QSound.play(r"music\lose.wav")
+        self.gameWin.savePointDialog.setPointLabel(str(self.dto.nowPoint))
         self.gameWin.savePointDialog.show()
 
     def checkLosed(self):

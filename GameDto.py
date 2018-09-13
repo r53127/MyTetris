@@ -5,6 +5,7 @@ import random
 
 from Const import CONST
 from GameRect import GameRect
+from Player import GamePlayer
 
 
 class GameDto():

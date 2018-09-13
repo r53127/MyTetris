@@ -64,7 +64,7 @@ class Database(Data):
         return players
 
     def saveUserData(self,player):
-        self.insertDB(player.name,player.score,1)
+        self.insertDB(player.name,player.point,1)
 
 
     def closeDB(self):
@@ -127,8 +127,8 @@ class DataDisk(Data):
         players.sort(key=lambda x:x.point,reverse=True)
         return players
 
-    def saveUserData(self):
-        pass
+    def saveUserData(self,player):
+        self.savePickleData(player)
 
     def isFileExist(self,file_path):
         if os.path.exists(file_path):
