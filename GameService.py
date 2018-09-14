@@ -5,23 +5,10 @@ import random
 
 from PyQt5.QtMultimedia import QSound
 
-from Const import CONST
-
 
 class GameService():
     def __init__(self, dto):
         self.dto = dto
-
-    def startGame(self):
-        if not self.dto.isStarted:
-            self.dto.isLosed = 0
-            self.dto.isStarted = 1
-            self.dto.nowRemoveLine = 0
-            self.dto.nowPoint = 0
-            self.dto.nowLevel = 0
-            self.dto.speed = CONST.GameSpeed
-            self.dto.gameMap = [[0] * self.dto.gameHeight for i in range(self.dto.gameWidth)]
-            self.dto.gameAct.initRect(random.randint(1, 7))
 
     def keyUp(self):
         if self.dto.isPaused or (not self.dto.isStarted) or self.dto.isLosed:  ##暂停或未开始或输了
@@ -58,20 +45,7 @@ class GameService():
         ##刷新一个新的方块
         self.dto.gameAct.initRect(self.dto.next)
         self.dto.next = random.randint(1, 7)
-        ##判断游戏是否结束
-        if self.checkLosed():
-            self.afterLosed()  # 输了以后的操作
-            return False  ##不能再下移
-
-    def afterLosed(self):
-        self.dto.isStarted = 0
-        self.dto.isLosed = 1
-        QSound.play(r"music\lose.wav")
-
-    def checkLosed(self):
-        for point in self.dto.gameAct.actPoints:
-            if self.dto.gameMap[point[0]][point[1]]:
-                return True
+        return False
 
     def removeLines(self):
         removed_Lines = 0

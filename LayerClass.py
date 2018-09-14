@@ -175,7 +175,6 @@ class DataLayer(LayerClass, metaclass=ABCMeta):
 
     ##绘制5个玩家纪录
     def drawData(self,painter,players_recorder):
-        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         i = 0
         while i<5:
             #判断要绘制的纪录是否超界
@@ -199,6 +198,7 @@ class DBLayer(DataLayer):
 
     def paint(self, painter):
         self.createlayer(painter)
+        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.DBImg)
         self.drawData(painter,self.gameDto.dbRcorder)
 
 
@@ -206,6 +206,7 @@ class WorldLayer(DataLayer):
 
     def paint(self, painter):
         self.createlayer(painter)
+        painter.drawImage(QPoint(self.x + PADDING, self.y + PADDING), CONST.WorldImg)
         self.drawData(painter,self.gameDto.diskRecorder)
 
 
@@ -242,7 +243,7 @@ class ButtonLayer(LayerClass):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
         self.btn2.pressed.connect(self.parent.gameControl.keySetup)
-        # if self.gameDto.isStarted:
+        # if self.dto.isStarted:
         #     self.btn1.setDisabled(1)
         # else:
         #     self.btn1.setEnabled(1)
