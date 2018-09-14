@@ -35,7 +35,7 @@ class GameControl():
         self.gameService = GameService(self.dto)
         # 传送对象的方法：1、构造函数初始化 2、Set方法 3、传递参数
         # 初始化玩家輸入姓名窗口
-        self.savePointDialog=SavePointDialog(self)
+        self.savePointDialog=SavePointDialog()
 
     # 加載玩家數據
     def reloadData(self):
@@ -82,7 +82,9 @@ class GameControl():
         self.dto.isLosed = 1
         QSound.play(r"music\lose.wav")
         self.savePointDialog.setPointLabel(str(self.dto.nowPoint))
-        self.savePointDialog.show()
+        got=self.savePointDialog.exec_()
+        if got:
+            self.saveData(self.savePointDialog.lineEdit.text())
 
     def checkLosed(self):
         for point in self.dto.gameAct.actPoints:

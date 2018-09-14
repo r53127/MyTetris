@@ -15,7 +15,7 @@ class SavePointDialog(QDialog, Ui_Dialog):
     Class documentation goes here.
     """
 
-    def __init__(self, gameControl):
+    def __init__(self):
         """
         Constructor
         
@@ -23,7 +23,6 @@ class SavePointDialog(QDialog, Ui_Dialog):
         @type QWidget
         """
         super(SavePointDialog, self).__init__()
-        self.gameControl=gameControl
         self.setupUi(self)
 
     def setPointLabel(self, label_text):
@@ -50,8 +49,7 @@ class SavePointDialog(QDialog, Ui_Dialog):
         Slot documentation goes here.
         """
         if self.checkLineEdit():
-            self.gameControl.saveData(self.lineEdit.text())
-            self.close()
+            self.accept()
 
 
     @pyqtSlot()
@@ -59,5 +57,5 @@ class SavePointDialog(QDialog, Ui_Dialog):
         """
         Slot documentation goes here.
         """
-        self.close()
+        self.reject()
 
