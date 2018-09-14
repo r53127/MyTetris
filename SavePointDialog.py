@@ -15,15 +15,15 @@ class SavePointDialog(QDialog, Ui_Dialog):
     Class documentation goes here.
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, gameControl):
         """
         Constructor
         
         @param parent reference to the parent widget
         @type QWidget
         """
-        super(SavePointDialog, self).__init__(parent)
-        self.parent = parent
+        super(SavePointDialog, self).__init__()
+        self.gameControl=gameControl
         self.setupUi(self)
 
     def setPointLabel(self, label_text):
@@ -50,7 +50,7 @@ class SavePointDialog(QDialog, Ui_Dialog):
         Slot documentation goes here.
         """
         if self.checkLineEdit():
-            self.parent.saveData(self.lineEdit.text())
+            self.gameControl.saveData(self.lineEdit.text())
             self.close()
 
 

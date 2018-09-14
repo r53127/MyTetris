@@ -243,7 +243,7 @@ class ButtonLayer(LayerClass):
         self.createlayer(painter)
         self.btn1.pressed.connect(self.parent.gameControl.keyStart)
         self.btn2.pressed.connect(self.parent.gameControl.keySetup)
-        # if self.gameDto.isStarted:
+        # if self.dto.isStarted:
         #     self.btn1.setDisabled(1)
         # else:
         #     self.btn1.setEnabled(1)

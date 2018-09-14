@@ -1,27 +1,18 @@
-import sys
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QCursor, QIcon
-from PyQt5.QtMultimedia import QSound
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow
 
 import LayerClass
 from Const import CONST
-from Db import Database, DataDisk
-from GameControl import GameControl
-from GameDto import GameDto
-from GameService import GameService
-from Player import GamePlayer
-from SavePointDialog import SavePointDialog
 
 
 class TetrisWindow(QMainWindow):
-    def __init__(self, gameDto):
+    def __init__(self, gameDto,gameControl):
         super().__init__()
         # 接收传入的游戏数据
         self.gameDto = gameDto
+        self.gameControl = gameControl
         self.initLayer()
-        self.initComponent()
         self.initUI()
 
     def initLayer(self):
@@ -45,32 +36,6 @@ class TetrisWindow(QMainWindow):
         self.setWindowFlag(Qt.MSWindowsFixedSizeDialogHint)
         self.setWindowOpacity(1)  # set transparency
         self.show()
-
-    def initComponent(self):
-        self.db_data=Database()
-        self.disk_data=DataDisk()
-        self.reloadData()
-        self.savePointDialog=SavePointDialog(parent=self)#初始化玩家輸入姓名窗口
-
-    #加載玩家數據
-    def reloadData(self):
-        self.gameDto.dbRcorder = self.db_data.loadUserData('score', 5)
-        self.gameDto.diskRecorder = self.disk_data.loadUserData()
-    #保存玩家數據
-
-    def saveData(self,playername):
-        try:
-            if self.gameDto.nowPoint==0:
-                return
-            player = GamePlayer(playername.strip(), self.gameDto.nowPoint)
-            self.db_data.saveUserData(player)
-            self.disk_data.saveUserData(player)
-            self.reloadData()
-        except BaseException as e:
-            print('Error is :', e)
-
-    def setGameControl(self, gameControl):
-        self.gameControl = gameControl
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -121,22 +86,4 @@ class TetrisWindow(QMainWindow):
             print('Error is :', e)
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
 
-    # 播放背景音乐
-    backmusic = QSound(r"music\backmusic01.wav")
-    backmusic.setLoops(-1)
-    backmusic.play()
-
-    # 创建游戏数据源
-    gameDto = GameDto()
-    # 创建游戏面板(连接游戏数据源)
-    gameWin = TetrisWindow(gameDto)
-    # 创建游戏逻辑块（连接游戏数据源）
-    gameServ = GameService(gameDto,gameWin)
-    # 创建游戏控制器（链接游戏面板和游戏逻辑块）
-    gameCtrl = GameControl(gameWin, gameServ)
-    # 安装游戏控制器
-    gameWin.setGameControl(gameCtrl)  # 传送对象的方法：1、构造函数初始化 2、Set方法
-    sys.exit(app.exec_())
